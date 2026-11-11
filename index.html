@@ -84,6 +84,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
   font-weight:900;font-size:clamp(30px,8vw,56px);color:#fff;text-align:center;opacity:0;transition:opacity .2s;
   text-shadow:0 3px 0 var(--redDark),0 0 16px rgba(0,0,0,.6)}
 #banner.show{opacity:1;animation:pop .45s}
+#banner.mode{font-size:clamp(26px,7vw,48px);background:rgba(0,0,0,.25)}
 #banner.save{color:#fffde7;text-shadow:0 3px 0 #1565c0,0 0 16px rgba(0,0,0,.6)}
 #banner .rev{font-size:.62em;background:rgba(255,255,255,.95);color:#222;text-shadow:none;border-radius:16px;padding:2px 16px;margin-top:6px}
 #banner .rev b{color:var(--red)}
@@ -126,6 +127,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
 
 /* ---------- player animation helpers ---------- */
 .anim{transform-box:fill-box;transform-origin:50% 50%}
+#jc{transform-box:fill-box;transform-origin:50% 50%}
 .yp .armL,.yp .armR{transform-box:fill-box;transform-origin:50% 8%;transition:transform .3s}
 .yp.cheer .armL{transform:rotate(150deg)} .yp.cheer .armR{transform:rotate(-150deg)}
 .yp.plane .armL{transform:rotate(90deg)} .yp.plane .armR{transform:rotate(-90deg)}
@@ -384,6 +386,8 @@ const Snd = {
     o.connect(g); g.connect(c.destination); o.start(t); l.start(t); o.stop(t + 0.5); l.stop(t + 0.5); },
   fanfare(){ if (!this.ok()) return; const t = this.ctx.currentTime;
     [523, 659, 784, 1046, 784, 1046].forEach((f, i) => this.tone(f, t + i * 0.16, i === 5 ? 0.7 : 0.2, 'triangle', 0.2)); },
+  clang(){ if (!this.ok()) return; const t = this.ctx.currentTime; this.tone(880, t, 0.5, 'triangle', 0.12); this.tone(1320, t, 0.4, 'sine', 0.06); },
+  bounce(){ if (!this.ok()) return; this.tone(240, this.ctx.currentTime, 0.1, 'sine', 0.3, 110); },
   sparkle(){ if (!this.ok()) return; const t = this.ctx.currentTime;
     [1046, 1318, 1568, 2093].forEach((f, i) => this.tone(f, t + i * 0.08, 0.25, 'sine', 0.12)); }
 };
@@ -466,8 +470,9 @@ const ballStyle = () => BALLS.find(b => b.id === S.equip.ball) || BALLS[0];
    SVG art (all hand-drawn here)
    ========================================================= */
 const SKIN = '#e9b07c', HAIR = '#3b2416';
-function playerSVG(j){
-  j = j || jersey();
+function playerSVG(j, o){
+  j = j || jersey(); o = o || {};
+  const nm = o.name === undefined ? 'يامن' : o.name, num = o.num || '17';
   const stroke = j.c === '#ffffff' ? 'stroke="#ccc" stroke-width="1"' : '';
   return `
   <g class="yp">
@@ -482,12 +487,39 @@ function playerSVG(j){
     <g class="armL"><path d="M15 30 L8 32 L4 46 L11 48 Z" fill="${j.c}" ${stroke}/><rect x="4" y="46" width="7" height="14" rx="3.5" fill="${SKIN}"/></g>
     <g class="armR"><path d="M45 30 L52 32 L56 46 L49 48 Z" fill="${j.c}" ${stroke}/><rect x="49" y="46" width="7" height="14" rx="3.5" fill="${SKIN}"/></g>
     <path d="M14 30 Q30 25 46 30 L47 62 L13 62 Z" fill="${j.c}" ${stroke}/>
-    <text x="30" y="38.5" font-size="7" font-weight="900" text-anchor="middle" fill="${j.n}" font-family="Tahoma,Arial">يامن</text>
-    <text x="30" y="56" font-size="17" font-weight="900" text-anchor="middle" fill="${j.n}" font-family="Arial Black,Arial" direction="ltr">17</text>
+    ${nm ? `<text x="30" y="38.5" font-size="7" font-weight="900" text-anchor="middle" fill="${j.n}" font-family="Tahoma,Arial">${nm}</text>` : ''}
+    <text x="30" y="56" font-size="17" font-weight="900" text-anchor="middle" fill="${j.n}" font-family="Arial Black,Arial" direction="ltr">${num}</text>
     <rect x="26" y="21" width="8" height="7" fill="${SKIN}"/>
     <circle cx="19.5" cy="14" r="2.6" fill="${SKIN}"/><circle cx="40.5" cy="14" r="2.6" fill="${SKIN}"/>
     <circle cx="30" cy="13" r="10.5" fill="${SKIN}"/>
     <path d="M19.5 14 Q19 2 30 2 Q41 2 40.5 14 Q40.5 20 37 22 L23 22 Q19.5 20 19.5 14 Z" fill="${HAIR}"/>
+  </g>`;
+}
+/* front view (keeper Yamen, team-mates) */
+function playerFrontSVG(j, o){
+  j = j || jersey(); o = o || {};
+  const num = o.num || '17';
+  const stroke = j.c === '#ffffff' ? 'stroke="#ccc" stroke-width="1"' : '';
+  const shorts = j.c === '#ffffff' ? '#d50000' : '#ffffff';
+  const glove = cx => o.gloves ? `<circle cx="${cx}" cy="61" r="4.6" fill="#fff" stroke="#ff7043" stroke-width="1.6"/>` : '';
+  return `
+  <g class="yp">
+    <ellipse cx="30" cy="98" rx="20" ry="3.5" fill="#000" opacity=".22"/>
+    <rect x="19" y="70" width="9" height="22" rx="3" fill="${SKIN}"/><rect x="32" y="70" width="9" height="22" rx="3" fill="${SKIN}"/>
+    <rect x="19" y="80" width="9" height="12" rx="2" fill="${shorts}"/><rect x="32" y="80" width="9" height="12" rx="2" fill="${shorts}"/>
+    <ellipse cx="23" cy="94" rx="7" ry="3.6" fill="#111"/><ellipse cx="37" cy="94" rx="7" ry="3.6" fill="#111"/>
+    <rect x="16" y="57" width="28" height="17" rx="4" fill="${shorts}" stroke="#ddd" stroke-width=".8"/>
+    <g class="armL"><path d="M15 30 L8 32 L4 46 L11 48 Z" fill="${j.c}" ${stroke}/><rect x="4" y="46" width="7" height="14" rx="3.5" fill="${SKIN}"/>${glove(7.5)}</g>
+    <g class="armR"><path d="M45 30 L52 32 L56 46 L49 48 Z" fill="${j.c}" ${stroke}/><rect x="49" y="46" width="7" height="14" rx="3.5" fill="${SKIN}"/>${glove(52.5)}</g>
+    <path d="M14 30 Q30 25 46 30 L47 62 L13 62 Z" fill="${j.c}" ${stroke}/>
+    <path d="M24 28 Q30 34 36 28" fill="none" stroke="${j.n}" stroke-width="1.6"/>
+    <text x="37" y="45" font-size="10" font-weight="900" text-anchor="middle" fill="${j.n}" font-family="Arial Black,Arial" direction="ltr">${num}</text>
+    <rect x="26" y="21" width="8" height="7" fill="${SKIN}"/>
+    <circle cx="19.5" cy="14" r="2.6" fill="${SKIN}"/><circle cx="40.5" cy="14" r="2.6" fill="${SKIN}"/>
+    <circle cx="30" cy="13" r="10.5" fill="${SKIN}"/>
+    <path d="M19.5 12 Q20 1.5 30 2 Q40 1.5 40.5 12 Q36 6.5 30 7.5 Q24 6.5 19.5 12 Z" fill="${HAIR}"/>
+    <circle cx="26" cy="14" r="1.4" fill="#222"/><circle cx="34" cy="14" r="1.4" fill="#222"/>
+    <path d="M26 18 Q30 21.5 34 18" fill="none" stroke="#7a3b1d" stroke-width="1.3" stroke-linecap="round"/>
   </g>`;
 }
 function playerStandalone(j){ return `<svg viewBox="-6 -8 72 110" class="hero">${playerSVG(j)}</svg>`; }
@@ -839,45 +871,127 @@ $('#goParent').addEventListener('click', () => { Snd.init(); Snd.tap(); gate(() 
 /* =========================================================
    PLAY
    ========================================================= */
-let G = null;          // current game {stage, qs, i, results[], busy}
-const SCENE = { ballX:200, ballY:203 };
+let G = null;          // current game {stage, qs, modes, i, results[], busy}
+const SC = { mode:null, cols:[335, 200, 65], base:'', jug:0 };   // scene state
+const MK = ['#e53935', '#1e88e5', '#f9a825'];                    // same colours as the 3 answer buttons
+const OPP = { c:'#1e5bd6', n:'#ffffff' };                        // opponent kit (generic blue)
 
-function buildScene(){
-  const sc = $('#scene');
+const MODES = {
+  penalty: { title:'ضربة جزاء! ⚽', say:'ضربة جزاء! جاوب صح وشوط.',
+    win:['جوووون يا يامن! ⚽', 'جون عالمي! 🔥', 'الله عليك يا كابتن! 👏', 'هدف ولا أروع! 🏆'],
+    winSay:['جووون يا يامن!', 'جون عالمي!', 'الله عليك يا كابتن!', 'هدف ولا أروع!'], miss:'🧤 قربت! جرب تاني 💪' },
+  keeper: { title:'إنت الحارس يا يامن! 🧤', say:'دلوقتي إنت الحارس! جاوب صح وامسك الكورة.',
+    win:['صدّة عالمية يا يامن! 🧤', 'مسكتها يا بطل! 🧤', 'حارس أسطوري! 🧤'],
+    winSay:['صدة عالمية يا يامن!', 'مسكتها يا بطل!', 'حارس أسطوري!'], miss:'🥅 خبطت في القايم! جرب تاني 💪' },
+  pass: { title:'مرّر لزميلك! 👟', say:'مرر الكورة للزميل اللي واقف عند الإجابة الصح.',
+    win:['تمريرة حلوة وجوون! ⚽', 'أسيست عالمي يا يامن! 🎯', 'فريق بطل! ⚽'],
+    winSay:['تمريرة حلوة وجوون!', 'أسيست عالمي يا يامن!', 'فريق بطل!'], miss:'قربت! جرب تاني 💪' },
+  dribble: { title:'راوغ وعدّي! 🏃', say:'عدي بالكورة من البوابة اللي عند الإجابة الصح.',
+    win:['راوغت وجبت جون! ⚽', 'مهارة عالية يا يامن! 🔥', 'محدش يقدر يوقفك! 🏃'],
+    winSay:['راوغت وجبت جون!', 'مهارة عالية يا يامن!', 'محدش يقدر يوقفك!'], miss:'🚧 الكورة خبطت في القمع! جرب تاني 💪' },
+  juggle: { title:'نطّط الكورة! 🤹', say:'يلا ننطط الكورة! جاوب صح.', miss:'قربت! جرب تاني 💪' }
+};
+const MODE_KEYS = Object.keys(MODES);
+/* every round: all 5 game types, 2 questions each, in random order */
+function roundModes(){ const out = []; shuffle(MODE_KEYS).forEach(m => out.push(m, m)); return out; }
+const toParts = x => typeof x === 'string' ? [{ t:x }] : (x || []);
+
+/* ---------- scene drawing ---------- */
+function sceneDefs(){
+  return `<defs>
+    <pattern id="net" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0 L8 8 M8 0 L0 8" stroke="#fff" stroke-width=".8" opacity=".75"/></pattern>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d0000"/><stop offset="1" stop-color="#b30000"/></linearGradient>
+  </defs>`;
+}
+function sceneField(){
   let crowd = '';
   for (let i = 0; i < 46; i++){
     const x = 6 + i * 8.6 + (i % 2) * 2, y = 9 + (i % 3) * 5;
     crowd += `<circle cx="${x}" cy="${y}" r="3.3" fill="${i % 3 === 0 ? '#fff' : (i % 3 === 1 ? '#ff4d4d' : '#ffd6d6')}"/>`;
   }
-  sc.innerHTML = `
-  <defs>
-    <pattern id="net" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0 L8 8 M8 0 L0 8" stroke="#fff" stroke-width=".8" opacity=".75"/></pattern>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d0000"/><stop offset="1" stop-color="#b30000"/></linearGradient>
-  </defs>
-  <rect width="400" height="250" fill="#34a64c"/>
+  return `<rect width="400" height="250" fill="#34a64c"/>
   <rect y="28" width="400" height="30" fill="#2f9844"/><rect y="88" width="400" height="34" fill="#2f9844"/><rect y="160" width="400" height="40" fill="#2f9844"/>
-  <rect width="400" height="28" fill="url(#sky)"/>${crowd}
-  <rect y="26" width="400" height="5" fill="#fff"/>
-  <polyline points="20,135 44,222 356,222 380,135" fill="none" stroke="#fff" stroke-width="2.5" opacity=".9"/>
+  <rect width="400" height="28" fill="url(#sky)"/>${crowd}<rect y="26" width="400" height="5" fill="#fff"/>`;
+}
+function bigGoal(){
+  return `<polyline points="20,135 44,222 356,222 380,135" fill="none" stroke="#fff" stroke-width="2.5" opacity=".9"/>
   <line x1="0" y1="135" x2="400" y2="135" stroke="#fff" stroke-width="2.5" opacity=".9"/>
   <circle cx="200" cy="203" r="2.5" fill="#fff"/>
   <g id="netG" class="anim"><rect x="96" y="46" width="208" height="89" fill="url(#net)"/><rect x="96" y="46" width="208" height="89" fill="#fff" opacity=".08"/></g>
   <rect x="90" y="40" width="6" height="96" fill="#fff" stroke="#ccc" stroke-width=".6"/>
   <rect x="304" y="40" width="6" height="96" fill="#fff" stroke="#ccc" stroke-width=".6"/>
-  <rect x="90" y="40" width="220" height="6" fill="#fff" stroke="#ccc" stroke-width=".6"/>
-  <g transform="translate(170 68)"><g id="keeper" class="anim">${keeperSVG()}</g></g>
-  <g transform="translate(132 150) scale(.98)"><g id="player" class="anim" style="transform-origin:50% 100%">${playerSVG()}</g></g>
-  <g transform="translate(${SCENE.ballX} ${SCENE.ballY})"><g id="ball" class="anim">${ballInner()}</g></g>`;
+  <rect x="90" y="40" width="220" height="6" fill="#fff" stroke="#ccc" stroke-width=".6"/>`;
 }
+function smallGoal(){
+  return `<line x1="0" y1="76" x2="400" y2="76" stroke="#fff" stroke-width="2" opacity=".85"/>
+  <polyline points="112,76 104,116 296,116 288,76" fill="none" stroke="#fff" stroke-width="2" opacity=".85"/>
+  <g id="netG" class="anim"><rect x="160" y="40" width="80" height="36" fill="url(#net)"/></g>
+  <rect x="156" y="36" width="4" height="41" fill="#fff"/><rect x="240" y="36" width="4" height="41" fill="#fff"/><rect x="156" y="36" width="88" height="4" fill="#fff"/>`;
+}
+const yamenBack = () => `<g transform="translate(150 150) scale(.98)"><g id="player" class="anim" style="transform-origin:50% 100%">${playerSVG()}</g></g>`;
+const ballAt = (x, y) => `<g transform="translate(${x} ${y})"><g id="ball" class="anim">${ballInner()}</g></g>`;
+
+function buildScene(mode){
+  SC.mode = mode; SC.base = '';
+  let h = sceneDefs() + sceneField();
+  if (mode === 'penalty'){
+    h += bigGoal() + `<g transform="translate(170 68)"><g id="keeper" class="anim">${keeperSVG()}</g></g>
+      <g transform="translate(132 150) scale(.98)"><g id="player" class="anim" style="transform-origin:50% 100%">${playerSVG()}</g></g>` + ballAt(200, 203);
+  } else if (mode === 'keeper'){
+    h += bigGoal() + `<g transform="translate(179 64.4) scale(.7)"><g id="player" class="anim" style="transform-origin:50% 50%">${playerFrontSVG(jersey(), { gloves:true })}</g></g>
+      <g transform="translate(132 150) scale(.98)"><g id="striker" class="anim" style="transform-origin:50% 100%">${playerSVG(OPP, { name:'', num:'9' })}</g></g>` + ballAt(200, 203);
+  } else if (mode === 'pass'){
+    h += smallGoal();
+    [7, 10, 11].forEach((n, i) => {
+      h += `<ellipse id="mk${i}" cx="${SC.cols[i]}" cy="140" rx="17" ry="5" fill="${MK[i]}" opacity=".95"/>
+        <g id="mateW${i}" transform="translate(${SC.cols[i] - 18.6} 79.2) scale(.62)"><g id="mate${i}" class="anim" style="transform-origin:50% 100%">${playerFrontSVG(jersey(), { num:String(n) })}</g></g>`;
+    });
+    h += yamenBack() + ballAt(205, 236);
+  } else if (mode === 'dribble'){
+    h += smallGoal();
+    for (let i = 0; i < 3; i++){
+      h += `<g id="gate${i}" transform="translate(${SC.cols[i]} 0)"><ellipse cx="0" cy="137" rx="11" ry="4" fill="${MK[i]}"/>
+        <g id="cone${i}" class="anim" style="transform-origin:50% 100%"><polygon points="-27,139 -20,119 -13,139" fill="#ff6d00" stroke="#fff" stroke-width="1.2"/><rect x="-25" y="128" width="10" height="3" fill="#fff"/>
+        <polygon points="13,139 20,119 27,139" fill="#ff6d00" stroke="#fff" stroke-width="1.2"/><rect x="15" y="128" width="10" height="3" fill="#fff"/></g></g>`;
+    }
+    h += yamenBack() + ballAt(205, 236);
+  } else { // juggle
+    h += `<circle cx="82" cy="128" r="44" fill="#fff" opacity=".92"/><text x="82" y="104" font-size="13" font-weight="900" text-anchor="middle" fill="#7d0000" font-family="Tahoma,Arial">العدّاد</text><text id="jc" x="82" y="152" font-size="50" font-weight="900" text-anchor="middle" fill="#c40000" font-family="Tahoma,Arial"></text>
+      <g transform="translate(158 100) scale(1.4)"><g id="player" class="anim" style="transform-origin:50% 100%">${playerSVG()}</g></g>` + ballAt(214, 226);
+  }
+  $('#scene').innerHTML = h;
+}
+
+/* line the team-mates / gates up with the 3 answer buttons below the pitch */
+function colX(i){
+  const btn = document.querySelectorAll('#opts .opt')[i], svg = $('#scene');
+  const fallback = [335, 200, 65][i];
+  try {
+    const m = svg.getScreenCTM(); if (!btn || !m) return fallback;
+    const r = btn.getBoundingClientRect(); if (!r.width) return fallback;
+    const pt = svg.createSVGPoint(); pt.x = r.left + r.width / 2; pt.y = r.top;
+    return Math.max(45, Math.min(355, pt.matrixTransform(m.inverse()).x));
+  } catch(e){ return fallback; }
+}
+function layoutColumns(){
+  if (SC.mode !== 'pass' && SC.mode !== 'dribble') return;
+  for (let i = 0; i < 3; i++){
+    const x = colX(i); SC.cols[i] = x;
+    if (SC.mode === 'pass'){ const w = $('#mateW' + i), mk = $('#mk' + i); if (w) w.setAttribute('transform', `translate(${x - 18.6} 79.2) scale(.62)`); if (mk) mk.setAttribute('cx', x); }
+    else { const g = $('#gate' + i); if (g) g.setAttribute('transform', `translate(${x} 0)`); }
+  }
+}
+window.addEventListener('resize', () => { if (G && !G.busy) layoutColumns(); });
 
 function startStage(i){
   if (timeIsUp()){ showRest(); return; }
   applyJersey();
-  G = { stage:i, qs:makeRound(i), i:0, results:[], busy:false, starsWon:0 };
-  buildScene(); show('play'); renderDots();
+  G = { stage:i, qs:makeRound(i), modes:roundModes(), i:0, results:[], busy:false, starsWon:0 };
+  SC.mode = null;
+  show('play'); renderDots();
   Snd.whistle();
-  Speech.say(`يلا بينا على ${STAGES[i].name}!`).then(() => { if (G && G.i === 0 && current === 'play') askCurrent(); });
   showQuestion(false);
+  Speech.say([{ t:`يلا بينا على ${STAGES[i].name}!` }, { t:MODES[G.modes[0]].say }]).then(() => { if (G && G.i === 0 && current === 'play' && !G.busy) askCurrent(); });
 }
 
 function renderDots(){
@@ -892,9 +1006,11 @@ function renderDots(){
   }
 }
 
+let modeBannerTimer = 0;
 function showQuestion(speak){
-  const q = G.qs[G.i];
+  const q = G.qs[G.i], mode = G.modes[G.i], isNew = mode !== SC.mode;
   q.tried = false;
+  if (isNew) buildScene(mode);
   $('#qtext').innerHTML = q.text;
   $('#qvisual').innerHTML = q.visual || '';
   const box = $('#opts'); box.innerHTML = '';
@@ -904,60 +1020,178 @@ function showQuestion(speak){
     b.addEventListener('click', () => answer(b, o));
     box.appendChild(b);
   });
+  layoutColumns();
   renderDots();
-  if (speak !== false) askCurrent();
+  if (isNew){
+    banner(MODES[mode].title, 'mode');
+    clearTimeout(modeBannerTimer);
+    modeBannerTimer = setTimeout(() => { const b = $('#banner'); if (b.dataset.tag === 'mode'){ b.className = ''; b.innerHTML = ''; b.dataset.tag = ''; } }, 1800);
+  }
+  if (speak !== false) Speech.say(isNew ? [{ t:MODES[mode].say }].concat(toParts(q.say)) : q.say);
 }
 function askCurrent(){ if (G) return Speech.say(G.qs[G.i].say); }
 $('#replayBtn').addEventListener('click', () => { Snd.init(); askCurrent(); });
 $('#quitBtn').addEventListener('click', () => { Snd.tap(); G = null; show('home'); });
 
-function anim(el, frames, opts){ try { return el.animate(frames, Object.assign({ fill:'forwards', easing:'ease-out' }, opts)); } catch(e){ return null; } }
+function anim(el, frames, opts){ try { return el && el.animate(frames, Object.assign({ fill:'forwards', easing:'ease-out' }, opts)); } catch(e){ return null; } }
 function resetScene(){
-  ['#ball', '#keeper', '#player', '#netG'].forEach(s => { const el = $(s); if (el && el.getAnimations) el.getAnimations().forEach(a => a.cancel()); });
-  const p = $('#scene .yp'); if (p) p.classList.remove('cheer', 'plane');
-  const pl = $('#player'); if (pl) pl.style.transformOrigin = '50% 100%';
-  const b = $('#banner'); b.className = ''; b.innerHTML = '';
+  const sc = $('#scene');
+  sc.querySelectorAll('.anim').forEach(el => { if (el.getAnimations) el.getAnimations().forEach(a => a.cancel()); });
+  sc.querySelectorAll('.yp').forEach(p => p.classList.remove('cheer', 'plane'));
+  const pl = $('#player'); if (pl) pl.style.transformOrigin = SC.mode === 'keeper' ? '50% 50%' : '50% 100%';
+  const jc = $('#jc'); if (jc) jc.textContent = '';
+  SC.base = '';
+  const b = $('#banner'); b.className = ''; b.innerHTML = ''; b.dataset.tag = '';
 }
+function netShake(){ anim($('#netG'), [{ transform:'scale(1)' }, { transform:'scale(1.04,1.06)' }, { transform:'scale(.98)' }, { transform:'scale(1)' }], { duration:450 }); }
 
-const GOAL_TXT = ['جوووون يا يامن! ⚽', 'جون عالمي! 🔥', 'الله عليك يا كابتن! 👏', 'هدف ولا أروع! 🏆', 'جوووون! برافو يا يامن 🌟'];
-const GOAL_SAY = ['جووون يا يامن!', 'جون عالمي!', 'الله عليك يا كابتن!', 'هدف ولا أروع!', 'جووون! برافو يا يامن'];
-
-async function shoot(goal){
-  resetScene();
+/* ---------- 1. penalty ---------- */
+async function playPenalty(goal){
   const ball = $('#ball'), keeper = $('#keeper'), player = $('#player');
-  const spots = [{x:124,y:68},{x:276,y:68},{x:122,y:114},{x:278,y:114},{x:200,y:62}];
-  const sp = pick(spots);
-  // run-up
+  const sp = pick([{x:124,y:68},{x:276,y:68},{x:122,y:114},{x:278,y:114},{x:200,y:62}]);
   anim(player, [{ transform:'translate(0,0)' }, { transform:'translate(26px,-22px) scale(.95)' }], { duration:320, easing:'ease-in' });
   await sleep(300);
   Snd.kick();
-  const dx = sp.x - SCENE.ballX, dy = sp.y - SCENE.ballY;
+  const dx = sp.x - 200, dy = sp.y - 203;
+  SC.base = 'translate(26px,-22px) scale(.95)';
   if (goal){
     const side = sp.x === 200 ? (Math.random() < .5 ? -1 : 1) : (sp.x < 200 ? 1 : -1);
     anim(keeper, [{ transform:'translate(0,0) rotate(0)' }, { transform:`translate(${side * 62}px,14px) rotate(${side * 80}deg)` }], { duration:480 });
     anim(ball, [{ transform:'translate(0,0) scale(1) rotate(0)' }, { transform:`translate(${dx}px,${dy}px) scale(.6) rotate(540deg)` }], { duration:560, easing:'cubic-bezier(.2,.7,.4,1)' });
     await sleep(560);
-    anim($('#netG'), [{ transform:'scale(1)' }, { transform:'scale(1.04,1.06)' }, { transform:'scale(.98)' }, { transform:'scale(1)' }], { duration:450 });
-    Snd.cheer();
+    netShake(); Snd.cheer();
   } else {
     const side = sp.x === 200 ? 0 : (sp.x < 200 ? -1 : 1);
-    const kx = side * 58, ky = side ? 10 : -14;
-    anim(keeper, [{ transform:'translate(0,0) rotate(0)' }, { transform:`translate(${kx}px,${ky}px) rotate(${side * 70}deg)` }], { duration:420 });
-    const hx = 200 + side * 66 - SCENE.ballX, hy = (side ? 92 : 64) - SCENE.ballY;
-    anim(ball, [
-      { transform:'translate(0,0) scale(1)', offset:0 },
-      { transform:`translate(${hx}px,${hy}px) scale(.65)`, offset:.7 },
-      { transform:`translate(${hx * .7}px,${hy * .55}px) scale(.75)`, offset:1 }
-    ], { duration:700 });
-    await sleep(440);
-    Snd.save();
-    await sleep(260);
+    anim(keeper, [{ transform:'translate(0,0) rotate(0)' }, { transform:`translate(${side * 58}px,${side ? 10 : -14}px) rotate(${side * 70}deg)` }], { duration:420 });
+    const hx = side * 66, hy = (side ? 92 : 64) - 203;
+    anim(ball, [{ transform:'translate(0,0) scale(1)', offset:0 }, { transform:`translate(${hx}px,${hy}px) scale(.65)`, offset:.7 }, { transform:`translate(${hx * .7}px,${hy * .55}px) scale(.75)`, offset:1 }], { duration:700 });
+    await sleep(440); Snd.save(); await sleep(260);
   }
 }
 
+/* ---------- 2. Yamen in goal ---------- */
+async function playKeeper(save){
+  const ball = $('#ball'), me = $('#player'), st = $('#striker');
+  anim(st, [{ transform:'translate(0,0)' }, { transform:'translate(26px,-22px) scale(.95)' }], { duration:320, easing:'ease-in' });
+  await sleep(300);
+  Snd.kick();
+  if (save){
+    const sp = pick([{x:132,y:80},{x:268,y:80},{x:136,y:112},{x:264,y:112},{x:200,y:72}]);
+    const side = sp.x < 200 ? -1 : (sp.x > 200 ? 1 : 0);
+    const kdx = (sp.x - 200) / .7, kdy = (sp.y - 99) / .7;   // keeper group is drawn at scale .7
+    me.querySelector('.yp').classList.add('cheer');
+    anim(me, [{ transform:'translate(0,0) rotate(0)' }, { transform:`translate(${kdx}px,${kdy}px) rotate(${side * 55}deg)` }], { duration:400 });
+    anim(ball, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${sp.x - 200}px,${sp.y - 203 - 14}px) scale(.7)` }], { duration:440, easing:'cubic-bezier(.2,.7,.4,1)' });
+    await sleep(440);
+    Snd.save(); Snd.cheer();
+    SC.base = `translate(${kdx}px,${kdy}px)`;
+  } else {
+    const side = pick([-1, 1]), px = side < 0 ? 98 : 302;
+    anim(me, [{ transform:'translate(0,0) rotate(0)' }, { transform:`translate(${-side * 50}px,14px) rotate(${-side * 55}deg)` }], { duration:420 });
+    anim(ball, [{ transform:'translate(0,0) scale(1)', offset:0 }, { transform:`translate(${px - 200}px,${70 - 203}px) scale(.7)`, offset:.55 },
+      { transform:`translate(${px - 200 + side * 50}px,${150 - 203}px) scale(.85)`, offset:1 }], { duration:820 });
+    await sleep(450); Snd.clang(); await sleep(370);
+  }
+}
+
+/* ---------- 3. pass to the team-mate standing at the answer ---------- */
+async function playPass(ok, idx){
+  const ball = $('#ball'), me = $('#player'), x = SC.cols[idx], mate = $('#mate' + idx);
+  anim(me, [{ transform:'translate(0,0)' }, { transform:'translate(18px,-12px)' }], { duration:280, easing:'ease-in' });
+  await sleep(260);
+  Snd.kick();
+  SC.base = 'translate(18px,-12px)';
+  const tx = x - 205, ty = 134 - 236;
+  if (ok){
+    anim(ball, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${tx}px,${ty}px) scale(.75)` }], { duration:520 });
+    await sleep(520);
+    if (mate){ mate.querySelector('.yp').classList.add('cheer'); anim(mate, [{ transform:'translateY(0)' }, { transform:'translateY(-14px)' }, { transform:'translateY(0)' }], { duration:400, fill:'none' }); }
+    await sleep(150);
+    Snd.kick();
+    anim(ball, [{ transform:`translate(${tx}px,${ty}px) scale(.75)` }, { transform:`translate(${200 - 205}px,${56 - 236}px) scale(.55)` }], { duration:420, easing:'cubic-bezier(.2,.7,.4,1)' });
+    await sleep(420);
+    netShake(); Snd.cheer();
+  } else {
+    anim(ball, [{ transform:'translate(0,0) scale(1)', offset:0 }, { transform:`translate(${tx * .55}px,${ty * .55}px) scale(.85)`, offset:.55 },
+      { transform:`translate(${tx * .15}px,${ty * .15}px) scale(.97)`, offset:1 }], { duration:900, easing:'ease-out' });
+    if (mate) anim(mate, [{ transform:'rotate(0)' }, { transform:'rotate(-6deg)' }, { transform:'rotate(6deg)' }, { transform:'rotate(0)' }], { duration:700, fill:'none' });
+    await sleep(500); Snd.save(); await sleep(400);
+  }
+}
+
+/* ---------- 4. dribble through the gate at the answer ---------- */
+async function playDribble(ok, idx){
+  const ball = $('#ball'), me = $('#player'), x = SC.cols[idx];
+  const steps = n => { for (let k = 0; k < n; k++) setTimeout(() => Snd.bounce(), k * 230); };
+  if (ok){
+    const end = 'translate(15px,-121px) scale(.7)';
+    anim(me, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${x - 185}px,${140 - 246 + 18}px) scale(.8)`, offset:.55 }, { transform:end }], { duration:1100, easing:'ease-in-out' });
+    anim(ball, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${x - 200}px,${142 - 236}px) scale(.8)`, offset:.55 }, { transform:'translate(5px,-124px) scale(.7)' }], { duration:1100, easing:'ease-in-out' });
+    steps(5);
+    await sleep(1100);
+    Snd.kick();
+    anim(ball, [{ transform:'translate(5px,-124px) scale(.7)' }, { transform:`translate(-5px,${56 - 236}px) scale(.5)` }], { duration:360 });
+    await sleep(360);
+    netShake(); Snd.cheer();
+    SC.base = end;
+  } else {
+    const cone = $('#cone' + idx);
+    anim(me, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${(x - 185) * .5}px,-45px) scale(.9)`, offset:.5 }, { transform:'translate(0,0) scale(1)' }], { duration:1100, easing:'ease-in-out' });
+    anim(ball, [{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${x - 205 + 14}px,${136 - 236}px) scale(.8)`, offset:.5 }, { transform:'translate(0,0) scale(1)' }], { duration:1100, easing:'ease-in-out' });
+    steps(2);
+    await sleep(550); Snd.save();
+    anim(cone, [{ transform:'rotate(0)' }, { transform:'rotate(-10deg)' }, { transform:'rotate(8deg)' }, { transform:'rotate(0)' }], { duration:500, fill:'none' });
+    await sleep(550);
+  }
+}
+
+/* ---------- 5. keepy-ups: juggle as many times as the numeric answer ---------- */
+function juggleCount(q){
+  const c = q.check || {};
+  switch (c.type){
+    case 'count': case 'hear': return c.n;
+    case 'next': return c.n + 1;
+    case 'prev': return c.n - 1;
+    case 'add': return c.a + c.b;
+    case 'sub': return c.a - c.b;
+    case 'max': return Math.max(...c.arr);
+    case 'min': return Math.min(...c.arr);
+    default: return 5;
+  }
+}
+async function playJuggle(ok, q){
+  const ball = $('#ball'), me = $('#player'), jc = $('#jc');
+  if (ok){
+    const n = Math.max(1, juggleCount(q)), per = Math.max(180, Math.min(380, 3800 / n));
+    for (let k = 1; k <= n; k++){
+      if (!G || SC.mode !== 'juggle') return;
+      Snd.bounce();
+      anim(ball, [{ transform:'translateY(0)' }, { transform:'translateY(-96px)', easing:'ease-in' }, { transform:'translateY(0)' }], { duration:per, easing:'ease-out', fill:'none' });
+      anim(me, [{ transform:'translateY(0)' }, { transform:'translateY(-3px)' }, { transform:'translateY(0)' }], { duration:per * .5, fill:'none' });
+      jc.textContent = fmt(k);
+      anim(jc, [{ transform:'scale(1.25)' }, { transform:'scale(1)' }], { duration:200, fill:'none' });
+      await sleep(per);
+    }
+    SC.jug = n; Snd.cheer();
+  } else {
+    Snd.bounce();
+    anim(ball, [{ transform:'translate(0,0)' }, { transform:'translate(0,-90px)', offset:.3 }, { transform:'translate(60px,8px)', offset:.65 }, { transform:'translate(0,0)', offset:1 }], { duration:1200, easing:'ease-in-out' });
+    await sleep(400); Snd.save(); await sleep(800);
+  }
+}
+
+function play(mode, ok, idx, q){
+  resetScene();
+  if (mode === 'keeper') return playKeeper(ok);
+  if (mode === 'pass') return playPass(ok, idx);
+  if (mode === 'dribble') return playDribble(ok, idx);
+  if (mode === 'juggle') return playJuggle(ok, q);
+  return playPenalty(ok);
+}
+
 async function celebrate(){
-  const p = $('#player'), yp = $('#scene .yp'), type = S.equip.celeb;
-  const back = 'translate(26px,-22px) scale(.95)';
+  const p = $('#player'); if (!p) return;
+  const yp = p.querySelector('.yp'), type = S.equip.celeb, back = SC.base || '';
   if (type === 'plane'){
     yp.classList.add('plane');
     anim(p, [{ transform:back + ' rotate(0)' }, { transform:back + ' translateX(-14px) rotate(-18deg)' }, { transform:back + ' translateX(14px) rotate(18deg)' }, { transform:back + ' translateX(-14px) rotate(-18deg)' }, { transform:back + ' rotate(0)' }], { duration:1500, easing:'ease-in-out' });
@@ -969,7 +1203,7 @@ async function celebrate(){
     anim(p, [{ transform:back }, { transform:back + ' translateX(-10px) scale(1.08,.9)' }, { transform:back + ' translateX(10px) scale(.92,1.08)' }, { transform:back + ' translateX(-10px) scale(1.08,.9)' }, { transform:back + ' translateX(10px) scale(.92,1.08)' }, { transform:back }], { duration:1400, easing:'ease-in-out' });
   } else {
     yp.classList.add('cheer');
-    anim(p, [{ transform:back }, { transform:back + ' translateY(-30px)' }, { transform:back }, { transform:back + ' translateY(-30px)' }, { transform:back }], { duration:1100, easing:'ease-in-out' });
+    anim(p, [{ transform:back + ' translateY(0)' }, { transform:back + ' translateY(-30px)' }, { transform:back + ' translateY(0)' }, { transform:back + ' translateY(-30px)' }, { transform:back + ' translateY(0)' }], { duration:1100, easing:'ease-in-out' });
     if (type === 'fire') fireworks();
   }
   confetti(type === 'fire' ? 50 : 34);
@@ -1000,27 +1234,30 @@ function fireworks(){
   }
 }
 
-function banner(html, cls){ const b = $('#banner'); b.className = ''; void b.offsetWidth; b.innerHTML = html; b.className = 'show ' + (cls || ''); }
+function banner(html, cls){ const b = $('#banner'); b.className = ''; void b.offsetWidth; b.innerHTML = html; b.dataset.tag = cls || ''; b.className = 'show ' + (cls || ''); }
 
 function stat(sub){ return S.stats[sub] || (S.stats[sub] = { q:0, f:0 }); }
 
 async function answer(btn, o){
   if (!G || G.busy || btn.disabled) return;
   G.busy = true; Snd.init();
-  const q = G.qs[G.i];
+  const q = G.qs[G.i], mode = G.modes[G.i];
+  const idx = [...document.querySelectorAll('#opts .opt')].indexOf(btn);
   Speech.stop();
   document.querySelectorAll('.opt').forEach(b => b.style.pointerEvents = 'none');
   if (o.ok){
     btn.classList.add('right');
-    await shoot(true);
-    const k = rnd(GOAL_TXT.length);
-    banner(GOAL_TXT[k] + (q.reveal ? `<span class="rev">${q.reveal}</span>` : ''));
+    await play(mode, true, idx, q);
+    if (!G) return;
+    let txt, say;
+    if (mode === 'juggle'){ txt = `نطّطتها ${fmt(SC.jug)} مرة! 🤹`; say = `نططتها ${SC.jug} مرة! الله عليك`; }
+    else { const M = MODES[mode], k = rnd(M.win.length); txt = M.win[k]; say = M.winSay[k]; }
+    banner(txt + (q.reveal ? `<span class="rev">${q.reveal}</span>` : ''));
     celebrate();
     const st = stat(q.sub); st.q++;
     if (!q.tried){ st.f++; addStars(1); G.results[G.i] = 'first'; G.starsWon++; } else G.results[G.i] = 'later';
     save(); renderDots();
-    const sayParts = [{ t:GOAL_SAY[k] }].concat(q.after ? (typeof q.after === 'string' ? [{ t:q.after }] : q.after) : []);
-    await Promise.all([sleep(q.after ? 2600 : 2100), Speech.say(sayParts)]);
+    await Promise.all([sleep(q.after ? 2600 : 2100), Speech.say([{ t:say }].concat(toParts(q.after)))]);
     if (!G) return;
     resetScene(); G.i++;
     if (G.i >= 10){ finishRound(); return; }
@@ -1033,8 +1270,9 @@ async function answer(btn, o){
       const m = S.mistakes[q.label] || (S.mistakes[q.label] = { n:0, s:q.sub });
       m.n++; save();
     }
-    await shoot(false);
-    banner('🧤 قربت! جرب تاني 💪', 'save');
+    await play(mode, false, idx, q);
+    if (!G) return;
+    banner(MODES[mode].miss, 'save');
     btn.disabled = true;
     await Promise.all([sleep(1300), Speech.say('قربت! جرب تاني')]);
     if (!G) return;
@@ -1051,7 +1289,7 @@ function finishRound(){
   save();
   $('#endCup').innerHTML = trophySVG(STAGE_COLORS[st]);
   $('#endTitle').textContent = `كسبت كاس ${STAGES[st].name}! 🏆`;
-  $('#endStars').innerHTML = `جبت ${fmt(10)} جوان! ⚽<br>⭐ +${fmt(G.starsWon + 3)} نجمة`;
+  $('#endStars').innerHTML = `خلّصت الـ ${fmt(10)} تحديات! ⚽🧤🤹<br>⭐ +${fmt(G.starsWon + 3)} نجمة`;
   $('#endModal').classList.add('show');
   Snd.fanfare(); confetti(60);
   Speech.say(`مبروك يا يامن! كسبت كاس ${STAGES[st].name}. الكاس راح دولاب البطولات`);
@@ -1242,7 +1480,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 }
 
 /* test hook (read-only access for automated checks) */
-window.__YC = { GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
+window.__YC = { game: () => G, scene: SC, GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
 })();
 </script>
 </body>
