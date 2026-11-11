@@ -53,7 +53,14 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
   background:radial-gradient(circle at 50% 30%,#ff3b3b,#c40000 55%,#7d0000)}
 #intro .sub{color:#fff;font-size:22px;font-weight:700;opacity:.95}
 #intro .hero{width:min(46vw,210px);height:auto}
-#startBtn{font-size:34px;padding:18px 40px;background:#fff;color:var(--red);box-shadow:0 7px 0 #bbb;border-radius:30px;animation:pulse 1.4s infinite}
+#intro{background:linear-gradient(135deg,#c40000 0 50%,#ec407a 50% 100%)!important}
+.pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(560px,100%)}
+.pick-card{border:5px solid #fff;border-radius:28px;background:rgba(255,255,255,.96);padding:12px 8px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit;box-shadow:0 8px 0 rgba(0,0,0,.25);min-width:0}
+.pick-card:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.pick-card svg{width:min(30vw,140px);height:auto}
+.pick-card b{font-size:clamp(19px,5.2vw,30px);font-weight:900}
+.pick-card.yamen b{color:#c40000}.pick-card.roaa b{color:#ad1457}
+.pick-card small{font-size:clamp(13px,3.4vw,16px);color:#666;font-weight:700}
 @keyframes pulse{50%{transform:scale(1.07)}}
 
 /* ---------- home ---------- */
@@ -201,17 +208,94 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
 .kv b{font-size:22px}
 .note{font-size:15px;color:#555}
 .warn{background:#fff3e0;border:2px solid #ffb74d;border-radius:12px;padding:8px;font-size:16px}
+
+/* ================= ROAA ================= */
+body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122,.12) 3px,transparent 4px) 0 0/34px 34px}
+.screen.r{color:#4a1942}
+.r-title{font-weight:900;font-size:clamp(26px,7vw,44px);color:#ad1457;text-shadow:0 3px 0 #fff,0 5px 12px rgba(173,20,87,.25);text-align:center}
+.pill.r{color:#6a1b9a}
+.r-hero{display:flex;align-items:flex-end;justify-content:center;gap:10px}
+.r-hero .ghero{width:min(26vw,120px);height:auto;cursor:pointer}
+.r-stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px 12px;margin:16px 0 14px}
+.r-card{position:relative;border:4px solid #fff;border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,0),rgba(255,255,255,.35)),var(--c);color:#fff;font-family:inherit;font-weight:900;min-height:132px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 8px;box-shadow:0 7px 0 rgba(74,25,66,.25);min-width:0}
+.r-card:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(74,25,66,.25)}
+.r-card .ic{font-size:34px;background:#fff;color:var(--c);border-radius:18px;min-width:84px;padding:0 12px;line-height:1.45}
+.r-card .nm{font-size:clamp(16px,4.4vw,20px)}
+.r-card .lvl{font-size:13px;background:rgba(0,0,0,.18);border-radius:10px;padding:1px 10px}
+.r-card .cups{position:absolute;top:-17px;left:-6px;font-size:15px;background:#fff;color:#ad1457;border:3px solid #f8bbd0;border-radius:14px;padding:1px 9px}
+.r-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:auto}
+.rbtn{border:0;border-radius:22px;font-family:inherit;font-weight:900;font-size:clamp(15px,4vw,20px);padding:12px 6px;color:#fff;background:#ec407a;box-shadow:0 6px 0 #ad1457;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.rbtn span{font-size:30px}
+.rbtn.alt{background:#fff;color:#ad1457;box-shadow:0 6px 0 #f8bbd0}
+.rbtn.gray{background:#7e57c2;box-shadow:0 6px 0 #4527a0}
+.rbtn:active{transform:translateY(4px)}
+.r-box .rbtn{flex-direction:row;padding:12px 18px}
+#rplay{gap:6px;padding-left:8px;padding-right:8px}
+#rDots{flex:1;display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+#rDots i{width:clamp(16px,4.6vw,24px);height:clamp(16px,4.6vw,24px);border-radius:50%;background:#fff;border:2px solid #f48fb1;font-style:normal;font-size:11px;display:flex;align-items:center;justify-content:center}
+#rDots i.cur{background:#ec407a;transform:scale(1.2)}
+#rRead{background:#f8bbd0}
+.r-scene-wrap{position:relative;border-radius:20px;overflow:hidden;border:3px solid #fff;flex:none;box-shadow:0 4px 14px rgba(173,20,87,.2);background:#fbd3e9}
+#rScene{display:block;width:100%;height:clamp(150px,29vh,290px)}
+#rBanner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;font-weight:900;font-size:clamp(26px,7vw,46px);color:#fff;text-align:center;opacity:0;transition:opacity .2s;text-shadow:0 3px 0 #ad1457,0 0 14px rgba(0,0,0,.35)}
+#rBanner.show{opacity:1;animation:pop .45s}
+#rBanner.miss{text-shadow:0 3px 0 #6a1b9a,0 0 14px rgba(0,0,0,.35)}
+#rBanner .rev{font-size:.55em;background:rgba(255,255,255,.95);color:#ad1457;text-shadow:none;border-radius:16px;padding:2px 14px;margin-top:6px}
+.r-qcard{background:#fff;border-radius:22px;padding:12px 14px;flex:1;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:auto;box-shadow:0 5px 0 rgba(173,20,87,.15)}
+#rQtext{font-size:clamp(19px,4.8vw,28px);font-weight:800;text-align:center;line-height:1.6}
+#rQtext b{color:#ad1457}
+#rQvis{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;font-size:38px}
+#rOpts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex:none;padding-bottom:4px}
+#rOpts.three .ropt:last-child{grid-column:1/-1}
+.ropt{border:4px solid;border-radius:20px;min-height:clamp(62px,9vh,92px);font-family:inherit;font-weight:900;font-size:clamp(19px,5.2vw,30px);color:#3b1033;display:flex;align-items:center;justify-content:center;padding:6px 8px;box-shadow:0 6px 0 rgba(74,25,66,.2);min-width:0;transition:transform .1s,opacity .2s}
+.ropt:nth-child(1){background:#fce4ec;border-color:#ec407a}
+.ropt:nth-child(2){background:#ede7f6;border-color:#7e57c2}
+.ropt:nth-child(3){background:#e0f7fa;border-color:#26a69a}
+.ropt:nth-child(4){background:#fff3e0;border-color:#fb8c00}
+.ropt:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(74,25,66,.2)}
+.ropt[disabled]{opacity:.35;filter:grayscale(1)}
+.ropt.right{background:#c8f7c5!important;border-color:#2e7d32!important;animation:glow .6s 2}
+.ropt-t{line-height:1.3}
+.en-t,.enq{direction:ltr;unicode-bidi:isolate;font-family:"Trebuchet MS",Arial,sans-serif}
+.enq{display:inline-block}
+.enq .blank{color:#ec407a;letter-spacing:2px}
+.req{font-size:clamp(26px,6.5vw,40px);font-weight:900;direction:rtl;display:inline-flex;align-items:center;gap:.25em;flex-wrap:wrap;justify-content:center}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .1em;font-size:.9em}
+.frac b{border-bottom:2px solid currentColor;padding:0 .2em;color:inherit!important}
+.frac i{font-style:normal;padding:0 .2em}
+.ratio{direction:rtl;unicode-bidi:isolate;white-space:nowrap}
+.hint{font-size:15px;color:#8e6b88;font-weight:700}
+.rfig{width:min(70vw,240px);height:auto}
+.rfig text{fill:#4a1942;font-family:Tahoma,Arial;font-weight:700;font-size:15px}
+.pc-new{animation:pcPop .7s ease-out;transform-box:fill-box;transform-origin:50% 50%}
+@keyframes pcPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
+.r-box{background:linear-gradient(#fff,#fde7f1)}
+#rEndPic .ghero{width:110px;height:auto;animation:pop .7s}
+.r-empty{background:#fff;border-radius:20px;padding:24px;text-align:center;font-size:20px;line-height:1.7;color:#6a1b9a}
+.r-counts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 12px}
+.r-counts span{background:#fff;border-radius:14px;padding:4px 12px;font-size:16px}
+.r-album{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.r-look{background:#fff;border-radius:18px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 4px 0 rgba(173,20,87,.15)}
+.r-look svg{width:76px;height:150px}
+.r-look small{color:#8e6b88}
+#rLockerHero{display:flex;justify-content:center}#rLockerHero .ghero{width:110px;height:auto}
+#rLockerBody h3{color:#ad1457;font-size:22px;margin:12px 4px 6px}
+#rlocker .item svg{width:58px;height:106px}
+#parentTabs{display:flex;gap:8px;margin:4px 0}
+.ptab{flex:1;border:3px solid #cfd8dc;border-radius:16px;background:#fff;font-family:inherit;font-weight:900;font-size:19px;padding:8px}
+.ptab.on{border-color:#1976d2;background:#e3f2fd}
 </style>
 </head>
 <body>
 
 <!-- ============ INTRO ============ -->
 <section id="intro" class="screen active">
-  <div class="title">يامن الكابتن ⚽</div>
-  <div id="introHero"></div>
-  <div class="sub">جاوب صح… وشوط جون! 🥅</div>
-  <button id="startBtn" class="btn">يلا نلعب ⚽</button>
-  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٣ · ٥ ألعاب · ٣ مستويات</div>
+  <div class="title">مين هيلعب؟</div>
+  <div class="pick">
+    <button id="startBtn" class="pick-card yamen"><div id="introHero"></div><b>يامن الكابتن ⚽</b><small>أولى ابتدائي</small></button>
+    <button id="startRoaa" class="pick-card roaa"><div id="introRoaa"></div><b>رؤى المصممة 👗</b><small>خامسة وسادسة</small></button>
+  </div>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤ · يامن ورؤى</div>
 </section>
 
 <!-- ============ HOME ============ -->
@@ -221,6 +305,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
     <span class="pill">🏆 <span id="hCups">0</span></span>
     <span class="spacer"></span>
     <button class="icon-btn" id="soundToggle" aria-label="الصوت">🔊</button>
+    <button class="icon-btn" id="ySwitch" aria-label="تغيير اللاعب">👥</button>
   </div>
   <div class="hero-wrap"><div class="title" style="font-size:clamp(28px,7vw,46px)">يامن الكابتن</div><div id="homeHero"></div></div>
   <div class="stages" id="stages"></div>
@@ -259,6 +344,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
 <!-- ============ PARENT ============ -->
 <section id="parent" class="screen">
   <div class="topbar"><button class="icon-btn back" aria-label="رجوع" style="background:#eceff1">🏠</button><h2 style="flex:1">صفحة ولي الأمر 👨</h2></div>
+  <div id="parentTabs"></div>
   <div id="parentBody"></div>
 </section>
 
@@ -273,9 +359,9 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
 </div></div>
 
 <div id="rest" class="modal"><div class="box">
-  <p class="big">💪😴</p>
-  <h2>وقت الراحة يا كابتن 💪</h2>
-  <p>لعبت كتير النهارده يا بطل! اشرب مية وريّح عينيك، ونكمل بكرة ⚽</p>
+  <p class="big" id="restE">💪😴</p>
+  <h2 id="restT">وقت الراحة يا كابتن 💪</h2>
+  <p id="restP">لعبت كتير النهارده يا بطل! اشرب مية وريّح عينيك، ونكمل بكرة ⚽</p>
   <button class="btn small gray" id="restParent">ولي الأمر</button>
 </div></div>
 
@@ -284,6 +370,44 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
   <h2 id="endTitle">كسبت الكاس! 🏆</h2>
   <p id="endStars"></p>
   <div class="row"><button class="btn" id="endAgain">العب تاني ⚽</button><button class="btn white" id="endHome">الملاعب 🏟️</button></div>
+</div></div>
+
+<!-- ============ ROAA ============ -->
+<section id="rhome" class="screen r">
+  <div class="topbar">
+    <span class="pill r">💎 <span id="rGems">0</span></span>
+    <span class="pill r">👗 <span id="rDesigns">0</span></span>
+    <span class="spacer"></span>
+    <button class="icon-btn" id="rSwitch" aria-label="تغيير اللاعب">👥</button>
+  </div>
+  <div class="r-hero"><div class="r-title">رؤى المصممة ✨</div><div id="rHero"></div></div>
+  <div class="r-stages" id="rStages"></div>
+  <div class="r-nav">
+    <button class="rbtn" id="rGoAlbum"><span>📒</span>ألبوم التصاميم</button>
+    <button class="rbtn alt" id="rGoLocker"><span>💄</span>الاستوديو</button>
+    <button class="rbtn gray" id="rGoParent"><span>👨</span>ولي الأمر</button>
+  </div>
+</section>
+<section id="rplay" class="screen r">
+  <div class="topbar"><button class="icon-btn" id="rQuit" aria-label="الرئيسية">🏠</button><div id="rDots"></div><button class="icon-btn" id="rRead" aria-label="اسمعي السؤال">🔊</button></div>
+  <div class="r-scene-wrap"><svg id="rScene" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid meet"></svg><div id="rBanner"></div></div>
+  <div class="r-qcard"><div id="rQtext"></div><div id="rQvis"></div></div>
+  <div id="rOpts"></div>
+</section>
+<section id="ralbum" class="screen r">
+  <div class="topbar"><button class="icon-btn rback" aria-label="رجوع">🏠</button><div class="r-title" style="flex:1;font-size:clamp(24px,6.5vw,40px)">ألبوم التصاميم 📒</div></div>
+  <div id="rAlbumBody"></div>
+</section>
+<section id="rlocker" class="screen r">
+  <div class="topbar"><button class="icon-btn rback" aria-label="رجوع">🏠</button><div class="r-title" style="flex:1;font-size:clamp(24px,6.5vw,40px)">الاستوديو 💄</div><span class="pill r">💎 <span id="rlGems">0</span></span></div>
+  <div id="rLockerHero"></div>
+  <div id="rLockerBody"></div>
+</section>
+<div id="rEnd" class="modal"><div class="box r-box">
+  <div id="rEndPic"></div>
+  <h2 id="rEndTitle"></h2>
+  <p id="rEndTxt"></p>
+  <div class="row"><button class="rbtn" id="rEndAgain">تصميم جديد ✨</button><button class="rbtn alt" id="rEndHome">الاستوديوهات</button></div>
 </div></div>
 
 <div id="toast"></div>
@@ -304,7 +428,7 @@ const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { c
 const sample = (arr, k, excl) => shuffle(arr.filter(x => !excl || !excl(x))).slice(0, k);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const AR_DIG = '٠١٢٣٤٥٦٧٨٩';
-function fmt(n){ const s = String(n); return S.settings.digits === 'ar' ? s.replace(/\d/g, d => AR_DIG[d]) : s; }
+function fmt(n){ const s = String(n); return S.settings.digits === 'ar' ? s.replace(/\d/g, d => AR_DIG[d]).replace(/\./g, '٫') : s; }
 function todayKey(){ const d = new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
@@ -423,9 +547,9 @@ const Speech = {
   },
   stop(){ this.token++; if (this.supported) try { speechSynthesis.cancel(); } catch(e){} },
   /* parts: string | [{t, en?}] ; returns promise resolving when finished (or timeout) */
-  say(parts){
+  say(parts, force){
     if (typeof parts === 'string') parts = [{ t: parts }];
-    if (!this.supported || !S.settings.voice || !parts || !parts.length) return Promise.resolve();
+    if (!this.supported || (!force && !S.settings.voice) || !parts || !parts.length) return Promise.resolve();
     this.stop();
     const my = this.token;
     const total = parts.reduce((a, p) => a + p.t.length, 0);
@@ -1090,17 +1214,24 @@ function makeRound(stageIdx, lvl){
 /* =========================================================
    Screens
    ========================================================= */
-let current = 'intro';
+let current = 'intro', parentKid = 'yamen';
+const R_SCREENS = ['rhome', 'rplay', 'ralbum', 'rlocker'];
+const isRoaa = id => R_SCREENS.includes(id);
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
   current = id;
-  if (id !== 'play') Speech.stop();
+  document.body.classList.toggle('roaa', isRoaa(id));
+  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', isRoaa(id) ? '#ec407a' : '#c40000');
+  if (id !== 'play' && id !== 'rplay') Speech.stop();
+  if (id === 'rhome') renderRHome();
+  if (id === 'ralbum') renderRAlbum();
+  if (id === 'rlocker') renderRLocker();
   if (id === 'home') renderHome();
   if (id === 'cabinet') renderCabinet();
   if (id === 'locker') renderLocker();
   if (id === 'parent') renderParent();
 }
-document.querySelectorAll('.back').forEach(b => b.addEventListener('click', () => { Snd.tap(); show('home'); }));
+document.querySelectorAll('.back').forEach(b => b.addEventListener('click', () => { Snd.tap(); show(b.closest('#parent') && parentKid === 'roaa' ? 'rhome' : 'home'); }));
 
 function applyJersey(){ document.documentElement.style.setProperty('--jersey', jersey().c); }
 
@@ -1137,7 +1268,7 @@ function renderHome(){
 $('#soundToggle').addEventListener('click', () => { S.settings.sound = !S.settings.sound; S.settings.voice = S.settings.sound; save(); Snd.init(); Snd.tap(); renderHome(); });
 $('#goCabinet').addEventListener('click', () => { Snd.init(); Snd.tap(); show('cabinet'); Speech.say('دولاب البطولات بتاع يامن'); });
 $('#goLocker').addEventListener('click', () => { Snd.init(); Snd.tap(); show('locker'); Speech.say('اختار لبسك يا كابتن'); });
-$('#goParent').addEventListener('click', () => { Snd.init(); Snd.tap(); gate(() => show('parent')); });
+$('#goParent').addEventListener('click', () => { Snd.init(); Snd.tap(); parentKid = 'yamen'; gate(() => show('parent')); });
 
 /* =========================================================
    PLAY
@@ -1652,6 +1783,10 @@ $('#gateNo').addEventListener('click', () => { $('#gate').classList.remove('show
 
 const SUB_NAMES = { ar:'الحروف العربي', en:'الحروف الإنجليزي', num:'الأرقام', math:'الحساب', shape:'الأشكال والألوان' };
 function renderParent(){
+  $('#parentTabs').innerHTML = `<button class="ptab ${parentKid === 'yamen' ? 'on' : ''}" data-k="yamen">⚽ يامن</button><button class="ptab ${parentKid === 'roaa' ? 'on' : ''}" data-k="roaa">👗 رؤى</button>`;
+  document.querySelectorAll('.ptab').forEach(b => b.addEventListener('click', () => { parentKid = b.dataset.k; renderParent(); }));
+  $('#parent .back').onclick = null;
+  if (parentKid === 'roaa'){ renderParentRoaa($('#parentBody')); return; }
   const body = $('#parentBody');
   const mins = Math.floor(S.time.sec / 60);
   const limitTotal = S.settings.limit ? S.settings.limit + Math.round(S.time.bonus / 60) : 0;
@@ -1706,7 +1841,7 @@ function renderParent(){
       voiceOk ? `<p class="note">الصوت العربي المستخدم: ${esc(Speech.ar.name)} (${esc(Speech.ar.lang)})</p>` :
       `<p class="warn">مش لاقي صوت عربي متسطب على الجهاز. على أندرويد: الإعدادات ← اللغة والإدخال ← تحويل النص إلى كلام ← Google ← ثبّت "العربية". اللعبة هتحاول تقرا بالعربي برضه.</p>`}
   </div>`;
-  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">الإصدار ٣ (٥ أنواع لعب، ٣ مستويات)</p><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
+  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">الإصدار ٤ (يامن ورؤى)</p><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
     <button class="btn small" id="resetAll" style="background:#b71c1c">امسح التقدم وابدأ من الأول</button></div>`;
   body.innerHTML = html;
   $('#limitSel').addEventListener('change', e => { S.settings.limit = +e.target.value; save(); renderParent(); });
@@ -1728,26 +1863,646 @@ function renderParent(){
 /* =========================================================
    PLAY-TIME LIMIT
    ========================================================= */
-function timeIsUp(){ return S.settings.limit > 0 && S.time.sec >= S.settings.limit * 60 + S.time.bonus; }
+function timeIsUp(T){ T = T || S; return T.settings.limit > 0 && T.time.sec >= T.settings.limit * 60 + T.time.bonus; }
 function showRest(){
   if ($('#rest').classList.contains('show')) return;
+  const roaa = isRoaa(current);
+  $('#restE').textContent = roaa ? '💖😴' : '💪😴';
+  $('#restT').textContent = roaa ? 'وقت الراحة يا مصممة 💖' : 'وقت الراحة يا كابتن 💪';
+  $('#restP').textContent = roaa ? 'ذاكرتي كتير النهارده! ريّحي عينيك شوية، ونكمل تصاميم بكرة 👗' : 'لعبت كتير النهارده يا بطل! اشرب مية وريّح عينيك، ونكمل بكرة ⚽';
   $('#rest').classList.add('show');
-  Speech.say('وقت الراحة يا كابتن! لعبت كتير النهارده. اشرب مية ونكمل بكرة');
+  if (roaa) rSay('وقت الراحة يا رؤى! ريحي عينيك ونكمل بكرة'); else Speech.say('وقت الراحة يا كابتن! لعبت كتير النهارده. اشرب مية ونكمل بكرة');
 }
 function hideRest(){ $('#rest').classList.remove('show'); }
-$('#restParent').addEventListener('click', () => gate(() => { hideRest(); show('parent'); }));
+$('#restParent').addEventListener('click', () => { parentKid = isRoaa(current) ? 'roaa' : 'yamen'; gate(() => { hideRest(); show('parent'); }); });
 let tick = 0;
 setInterval(() => {
   if (S.time.date !== todayKey()){ S.time = { date:todayKey(), sec:0, bonus:0 }; save(); }
+  if (R.time.date !== todayKey()){ R.time = { date:todayKey(), sec:0, bonus:0 }; rSave(); }
   if (document.visibilityState !== 'visible' || current === 'parent' || current === 'intro' || $('#rest').classList.contains('show')) return;
-  S.time.sec++;
-  if (++tick % 10 === 0) save();
-  // during a shot we wait until the answer animation finishes (handled in answer())
-  if (timeIsUp() && !(G && G.busy && current === 'play')){ save(); showRest(); }
+  const roaa = isRoaa(current), T = roaa ? R : S, sv = roaa ? rSave : save;
+  T.time.sec++;
+  if (++tick % 10 === 0) sv();
+  // never interrupt an answer animation; the check runs again right after it
+  const busy = roaa ? (RG && RG.busy && current === 'rplay') : (G && G.busy && current === 'play');
+  if (timeIsUp(T) && !busy){ sv(); showRest(); }
 }, 1000);
-document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'visible') { save(); Speech.stop(); } });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'visible') { save(); rSave(); Speech.stop(); } });
 
 applyJersey();
+
+/* =========================================================================
+   ROAA THE DESIGNER  (12 y/o, Egyptian primary 5–6)
+   Each correct answer adds a piece to the outfit; 10 answers = a finished
+   look and a runway show; designs are saved in her album.
+   ========================================================================= */
+const RKEY = 'roaaDesigner.v1';
+const RDEFAULT = () => ({
+  gems: 0, designs: [], stats: {}, mistakes: {},
+  equip: { hair:'long', hairColor:'brown', coll:'rose' },
+  settings: { limit: 30, voice: false, diff: 'auto' },
+  level: { math:2, ar:2, en:2, sci:2, soc:2 },
+  time: { date: todayKey(), sec: 0, bonus: 0 }
+});
+let R;
+function rLoad(){
+  try { const raw = localStorage.getItem(RKEY); R = raw ? Object.assign(RDEFAULT(), JSON.parse(raw)) : RDEFAULT(); } catch(e){ R = RDEFAULT(); }
+  const d = RDEFAULT();
+  ['equip', 'settings', 'level', 'time'].forEach(k => R[k] = Object.assign(d[k], R[k] || {}));
+  R.stats = R.stats || {}; R.mistakes = R.mistakes || {}; R.designs = R.designs || [];
+}
+function rSave(){ try { localStorage.setItem(RKEY, JSON.stringify(R)); } catch(e){} }
+rLoad();
+const rSay = (parts, force) => (force || R.settings.voice) ? Speech.say(parts, true) : Promise.resolve();
+
+/* ---------------- wardrobe data ---------------- */
+const R_COLL = [
+  { id:'rose',   name:'الوردي',        need:0,  dress:'#f48fb1', acc:'#ad1457', pat:'dots',    patC:'#ffffff', shoe:'#ad1457' },
+  { id:'spring', name:'الربيع 🌸',     need:12, dress:'#c5e1a5', acc:'#ec407a', pat:'flowers', patC:'#f06292', shoe:'#f06292' },
+  { id:'sea',    name:'البحر 🌊',      need:28, dress:'#81d4fa', acc:'#0277bd', pat:'stripes', patC:'#ffffff', shoe:'#ffffff' },
+  { id:'night',  name:'سهرة النجوم ✨', need:45, dress:'#283593', acc:'#cfd8dc', pat:'stars',   patC:'#fff59d', shoe:'#b0bec5' },
+  { id:'lilac',  name:'الليلك 💜',     need:65, dress:'#ce93d8', acc:'#6a1b9a', pat:'hearts',  patC:'#ffffff', shoe:'#6a1b9a' },
+  { id:'royal',  name:'الملكي 👑',     need:90, dress:'#212121', acc:'#ffc107', pat:'sparkle', patC:'#ffd54f', shoe:'#ffc107', tiara:true }
+];
+const R_HAIR = [ { id:'long', name:'شعر طويل', need:0 }, { id:'pony', name:'ديل حصان', need:8 }, { id:'bun', name:'كعكة', need:22 }, { id:'curly', name:'كيرلي', need:38 } ];
+const R_HAIRC = [ { id:'brown', name:'بني', need:0, c:'#4e342e' }, { id:'black', name:'أسود', need:5, c:'#1b1b1b' }, { id:'auburn', name:'كستنائي', need:18, c:'#8d3b1f' }, { id:'honey', name:'عسلي', need:32, c:'#b9823a' } ];
+const PIECES = ['dress', 'pattern', 'shoes', 'belt', 'necklace', 'earrings', 'bag', 'bracelet', 'hairAcc', 'sparkle'];
+const PIECE_NAMES = { dress:'الفستان 👗', pattern:'النقشة 🎨', shoes:'الشوز 👠', belt:'الحزام', necklace:'السلسلة 📿', earrings:'الحلق 💎', bag:'الشنطة 👜', bracelet:'الإسورة', hairAcc:'توكة الشعر 🎀', sparkle:'اللمعة ✨' };
+const rColl = id => R_COLL.find(c => c.id === (id || R.equip.coll)) || R_COLL[0];
+
+/* ---------------- the girl (front view) ---------------- */
+let gUid = 0;
+function patDef(C, id){
+  const c = C.patC;
+  const body = {
+    dots:    `<circle cx="5" cy="5" r="1.6" fill="${c}"/>`,
+    stripes: `<rect y="0" width="10" height="3" fill="${c}" opacity=".9"/>`,
+    flowers: `<g fill="${c}"><circle cx="5" cy="3.4" r="1.3"/><circle cx="3.4" cy="5" r="1.3"/><circle cx="6.6" cy="5" r="1.3"/><circle cx="5" cy="6.6" r="1.3"/></g><circle cx="5" cy="5" r="1" fill="#fff59d"/>`,
+    stars:   `<polygon points="5,2 5.9,4.2 8.2,4.3 6.4,5.7 7,8 5,6.7 3,8 3.6,5.7 1.8,4.3 4.1,4.2" fill="${c}"/>`,
+    hearts:  `<path d="M5 7.6 L2.6 5.2 A1.4 1.4 0 0 1 5 3.4 A1.4 1.4 0 0 1 7.4 5.2 Z" fill="${c}"/>`,
+    sparkle: `<path d="M5 2 L5.7 4.3 L8 5 L5.7 5.7 L5 8 L4.3 5.7 L2 5 L4.3 4.3 Z" fill="${c}"/>`
+  }[C.pat];
+  return `<pattern id="${id}" width="10" height="10" patternUnits="userSpaceOnUse">${body}</pattern>`;
+}
+function girlSVG(o){
+  o = o || {};
+  const C = rColl(o.coll), hc = (R_HAIRC.find(h => h.id === (o.hairColor || R.equip.hairColor)) || R_HAIRC[0]).c, hair = o.hair || R.equip.hair;
+  const all = o.pieces === 'all', has = k => all || (o.pieces && o.pieces.has(k));
+  const nw = k => o.newPiece === k ? ' class="pc-new"' : '';
+  const uid = 'gp' + (++gUid), SK = '#f2c7a5';
+  const dressD = 'M38 62 Q50 57 62 62 L64 94 L78 146 Q50 154 22 146 L36 94 Z';
+  let h = `<defs>${patDef(C, uid)}</defs>`;
+  // hair behind the body
+  if (hair === 'long') h += `<path d="M33 34 Q28 72 32 100 Q50 106 68 100 Q72 72 67 34 Z" fill="${hc}"/>`;
+  if (hair === 'pony') h += `<path d="M61 28 Q82 40 75 80 Q71 94 64 98 Q71 70 59 40 Z" fill="${hc}"/>`;
+  if (hair === 'curly') h += [[33,34,11],[67,34,11],[31,52,10],[69,52,10],[34,68,9],[66,68,9],[50,22,13]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hc}"/>`).join('');
+  if (hair === 'bun') h += `<circle cx="50" cy="18" r="9" fill="${hc}"/>`;
+  // legs + shoes
+  h += `<rect x="43" y="140" width="5" height="34" rx="2" fill="${SK}"/><rect x="52" y="140" width="5" height="34" rx="2" fill="${SK}"/>`;
+  h += `<g${nw('shoes')}><ellipse cx="45" cy="176" rx="6" ry="3.2" fill="${has('shoes') ? C.shoe : '#cfcfcf'}" stroke="rgba(0,0,0,.25)" stroke-width=".6"/><ellipse cx="55" cy="176" rx="6" ry="3.2" fill="${has('shoes') ? C.shoe : '#cfcfcf'}" stroke="rgba(0,0,0,.25)" stroke-width=".6"/></g>`;
+  // dress
+  h += has('dress') ? `<path${nw('dress')} d="${dressD}" fill="${C.dress}" stroke="rgba(0,0,0,.18)" stroke-width=".8"/>`
+                    : `<path d="${dressD}" fill="#fafafa" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3 2"/>`;
+  if (has('pattern') && has('dress')) h += `<path${nw('pattern')} d="${dressD}" fill="url(#${uid})"/>`;
+  if (has('belt')) h += `<g${nw('belt')}><rect x="35.5" y="91" width="29" height="5" rx="2" fill="${C.acc}"/><rect x="47.5" y="90.5" width="5" height="6" rx="1" fill="#ffd54f"/></g>`;
+  // arms
+  h += `<path d="M38 64 L30 104" stroke="${SK}" stroke-width="5.5" stroke-linecap="round"/><path d="M62 64 L70 104" stroke="${SK}" stroke-width="5.5" stroke-linecap="round"/>`;
+  h += `<circle cx="30" cy="106" r="3.3" fill="${SK}"/><circle cx="70" cy="106" r="3.3" fill="${SK}"/>`;
+  if (has('dress')) h += `<path d="M38 62 L34.5 72 L40 73 Z M62 62 L65.5 72 L60 73 Z" fill="${C.dress}"/>`;
+  if (has('bracelet')) h += `<rect${nw('bracelet')} x="27" y="99" width="6.5" height="2.8" rx="1.2" fill="#ffd54f" stroke="#c49000" stroke-width=".4"/>`;
+  if (has('bag')) h += `<g${nw('bag')}><path d="M71 104 Q76 96 81 104" fill="none" stroke="${C.acc}" stroke-width="1.6"/><rect x="69" y="104" width="15" height="12" rx="2.5" fill="${C.acc}"/><rect x="75.5" y="107" width="2.5" height="2.5" rx=".6" fill="#ffd54f"/></g>`;
+  // neck, head, face
+  h += `<rect x="46.5" y="49" width="7" height="11" rx="2" fill="${SK}"/>`;
+  if (has('necklace')) h += `<g${nw('necklace')}><path d="M44.5 57 Q50 64 55.5 57" fill="none" stroke="#ffd54f" stroke-width="1.3"/><circle cx="50" cy="62.3" r="1.9" fill="${C.acc}" stroke="#ffd54f" stroke-width=".6"/></g>`;
+  h += `<circle cx="50" cy="37" r="15" fill="${SK}"/>`;
+  h += `<ellipse cx="44.5" cy="38" rx="2" ry="2.5" fill="#3b2416"/><ellipse cx="55.5" cy="38" rx="2" ry="2.5" fill="#3b2416"/><circle cx="45.2" cy="37.2" r=".7" fill="#fff"/><circle cx="56.2" cy="37.2" r=".7" fill="#fff"/>`;
+  h += `<path d="M42 35 L41 33.8 M43.5 34.5 L43 33 M57 34.5 L57.5 33 M58.5 35 L59.5 33.8" stroke="#3b2416" stroke-width=".7"/>`;
+  h += `<circle cx="41" cy="43.5" r="2.6" fill="#f8a5c2" opacity=".7"/><circle cx="59" cy="43.5" r="2.6" fill="#f8a5c2" opacity=".7"/>`;
+  h += `<path d="M46.5 45 Q50 48.2 53.5 45" fill="none" stroke="#c2185b" stroke-width="1.3" stroke-linecap="round"/>`;
+  if (has('earrings')) h += `<g${nw('earrings')}><circle cx="35.6" cy="43" r="1.8" fill="#ffd54f"/><circle cx="64.4" cy="43" r="1.8" fill="#ffd54f"/></g>`;
+  // hair in front
+  if (hair === 'curly') h += [[38,25,5],[44,22,5],[50,21,5],[56,22,5],[62,25,5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hc}"/>`).join('');
+  else h += `<path d="M35 36 Q35 20 50 20 Q65 20 65 36 Q58 27 50 29 Q42 27 35 36 Z" fill="${hc}"/>`;
+  if (hair === 'long') h += `<path d="M35.5 33 Q32 50 35 64 L39 62 Q36.5 48 38.5 35 Z M64.5 33 Q68 50 65 64 L61 62 Q63.5 48 61.5 35 Z" fill="${hc}"/>`;
+  if (has('hairAcc')) h += C.tiara
+    ? `<path${nw('hairAcc')} d="M40 23 L43 17 L46.5 21 L50 15 L53.5 21 L57 17 L60 23 Z" fill="#ffd54f" stroke="#c49000" stroke-width=".6"/>`
+    : `<g${nw('hairAcc')}><path d="M57 22 L52 18.5 L52.5 25.5 Z M57 22 L62 18.5 L61.5 25.5 Z" fill="${C.acc}"/><circle cx="57" cy="22" r="1.6" fill="${C.acc}" stroke="#fff" stroke-width=".5"/></g>`;
+  if (has('sparkle')) h += `<g${nw('sparkle')} fill="#ffd54f">${[[16,60],[84,58],[12,120],[88,128],[22,170],[80,168],[50,6]].map(([x, y]) => `<path d="M${x} ${y - 4} L${x + 1.2} ${y - 1.2} L${x + 4} ${y} L${x + 1.2} ${y + 1.2} L${x} ${y + 4} L${x - 1.2} ${y + 1.2} L${x - 4} ${y} L${x - 1.2} ${y - 1.2} Z"/>`).join('')}</g>`;
+  return `<g class="girl">${h}</g>`;
+}
+const girlStandalone = o => `<svg viewBox="4 0 92 184" class="ghero">${girlSVG(Object.assign({ pieces:'all' }, o))}</svg>`;
+
+/* ---------------- helpers for grade 5–6 questions ---------------- */
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const lcm = (a, b) => a / gcd(a, b) * b;
+const fr = (a, b) => { const g = gcd(a, b); return [a / g, b / g]; };
+const r2 = x => Math.round(x * 100) / 100;
+const PCT = () => S.settings.digits === 'ar' ? '٪' : '%';
+const fracH = (a, b) => b === 1 ? `<span>${fmt(a)}</span>` : `<span class="frac"><b>${fmt(a)}</b><i>${fmt(b)}</i></span>`;
+const eqH = t => `<span class="req">${t}</span>`;
+/* number answer + 3 distinct wrong ones (from candidates, then neighbours) */
+function nOpts(ans, cands, f){
+  f = f || (x => `<span>${fmt(x)}</span>`);
+  const out = [];
+  shuffle(cands).forEach(c => { c = r2(c); if (out.length < 3 && Number.isFinite(c) && c >= 0 && c !== ans && !out.includes(c)) out.push(c); });
+  for (let d = 1; out.length < 3; d++) [ans + d, ans - d].forEach(c => { c = r2(c); if (out.length < 3 && c >= 0 && c !== ans && !out.includes(c)) out.push(c); });
+  return [opt(f(ans), 1, ans), ...out.map(x => opt(f(x), 0, x))];
+}
+/* fraction answer [n,d] + 3 wrong fractions with a different VALUE */
+function fOpts(ans, cands){
+  const val = x => x[0] / x[1], out = [], key = x => x[0] + '/' + x[1];
+  const ok = x => x[1] > 0 && x[0] > 0 && Math.abs(val(x) - val(ans)) > 1e-9 && !out.some(y => Math.abs(val(y) - val(x)) < 1e-9);
+  shuffle(cands.map(c => fr(c[0], c[1]))).forEach(c => { if (out.length < 3 && ok(c)) out.push(c); });
+  for (let d = 1; out.length < 3; d++) [[ans[0] + d, ans[1]], [ans[0], ans[1] + d]].map(c => fr(c[0], c[1])).forEach(c => { if (out.length < 3 && ok(c)) out.push(c); });
+  return [opt(fracH(ans[0], ans[1]), 1, key(ans)), ...out.map(x => opt(fracH(x[0], x[1]), 0, key(x)))];
+}
+/* text answer + wrong ones */
+const tOpts = (ans, wrong, cls) => [opt(`<span class="${cls || ''}">${ans}</span>`, 1, ans), ...wrong.map(w => opt(`<span class="${cls || ''}">${w}</span>`, 0, w))];
+function coprimePair(lo, hi){ for (;;){ const m = randInt(lo, hi), n = randInt(lo, hi); if (m !== n && gcd(m, n) === 1) return [m, n]; } }
+
+/* ---------------- banks (checked by hand) ---------------- */
+const AR_SYN = [['شجاع','جريء'],['سعيد','مسرور'],['المنزل','البيت'],['العام','السنة'],['الغيث','المطر'],['الليث','الأسد'],['الفُلك','السفينة'],['الوغى','الحرب'],['شاهق','عالٍ'],['أبصر','رأى'],['الجِدّ','الاجتهاد'],['الرفيق','الصديق']];
+const AR_ANT = [['النجاح','الفشل'],['قوي','ضعيف'],['الصدق','الكذب'],['الكرم','البخل'],['الليل','النهار'],['قريب','بعيد'],['سهل','صعب'],['الأمل','اليأس'],['صعد','نزل'],['أول','آخر'],['شجاع','جبان'],['الفرح','الحزن']];
+const AR_PL = [['كتاب','كتب'],['قلم','أقلام'],['مدرسة','مدارس'],['طالب','طلاب'],['بيت','بيوت'],['شجرة','أشجار'],['ولد','أولاد'],['نهر','أنهار'],['جبل','جبال'],['صديق','أصدقاء'],['مدينة','مدن'],['سفينة','سفن'],['مفتاح','مفاتيح'],['كرسي','كراسي']];
+const AR_SENT = [['العلمُ نورٌ','اسمية'],['السماءُ صافيةٌ','اسمية'],['الطالبُ مجتهدٌ','اسمية'],['الوردةُ جميلةٌ','اسمية'],['مصرُ بلدٌ عظيمٌ','اسمية'],['النيلُ طويلٌ','اسمية'],
+  ['ذهبَ الطالبُ إلى المدرسةِ','فعلية'],['يقرأُ أحمدُ القصةَ','فعلية'],['سافرَ الأبُ','فعلية'],['تشرقُ الشمسُ','فعلية'],['كتبتْ رؤى الدرسَ','فعلية'],['نجحَ المجتهدُ','فعلية']];
+const AR_IRAB = [['العلمُ نورٌ','العلم','مبتدأ'],['العلمُ نورٌ','نور','خبر'],['السماءُ صافيةٌ','صافية','خبر'],['الطالبُ مجتهدٌ','الطالب','مبتدأ'],['الحديقةُ واسعةٌ','واسعة','خبر'],['النيلُ طويلٌ','النيل','مبتدأ'],
+  ['ذهبَ الطالبُ إلى المدرسةِ','الطالب','فاعل'],['يقرأُ أحمدُ القصةَ','أحمد','فاعل'],['يقرأُ أحمدُ القصةَ','القصة','مفعول به'],['كتبتْ رؤى الدرسَ','الدرس','مفعول به'],['شربَ الطفلُ اللبنَ','الطفل','فاعل'],['شربَ الطفلُ اللبنَ','اللبن','مفعول به']];
+const AR_DUAL = [['كتاب','كتابان',['كتابين','كتب','كتابون']],['معلم','معلمان',['معلمين','معلمون','معلمات']],['قلم','قلمان',['قلمين','أقلام','قلمون']],['شجرة','شجرتان',['شجرتين','أشجار','شجرون']],['طالب','طالبان',['طالبين','طلاب','طالبون']]];
+const AR_SOUND = [['مهندس','مهندسون',['مهندسين','مهندسات','مهندسان']],['معلم','معلمون',['معلمين','معلمات','معلمان']],['لاعب','لاعبون',['لاعبين','لاعبات','لاعبان']],['مسافر','مسافرون',['مسافرين','مسافرات','مسافران']],['فلاح','فلاحون',['فلاحين','فلاحات','فلاحان']]];
+const AR_SIGNS = [['علامة رفع المثنى؟','الألف',['الواو','الضمة','الياء']],['علامة رفع جمع المذكر السالم؟','الواو',['الألف','الضمة','الياء']],['علامة نصب جمع المذكر السالم؟','الياء',['الواو','الفتحة','الألف']],
+  ['علامة نصب المثنى؟','الياء',['الألف','الفتحة','الواو']],['علامة رفع الاسم المفرد؟','الضمة',['الفتحة','الكسرة','الواو']],['علامة نصب جمع المؤنث السالم؟','الكسرة',['الفتحة','الضمة','الياء']],['علامة جر الاسم المفرد؟','الكسرة',['الفتحة','الضمة','الألف']]];
+
+const EN_PAST = [['go','went','gone'],['eat','ate','eaten'],['see','saw','seen'],['write','wrote','written'],['take','took','taken'],['swim','swam','swum'],['drink','drank','drunk'],['sing','sang','sung'],['give','gave','given'],
+  ['buy','bought'],['think','thought'],['teach','taught'],['catch','caught'],['make','made'],['have','had'],['fly','flew','flown'],['find','found'],['sleep','slept'],['wear','wore','worn'],['come','came']];
+const EN_COMP = [['big','bigger','biggest','biger'],['tall','taller','tallest','more tall'],['happy','happier','happiest','happyer'],['good','better','best','gooder'],['bad','worse','worst','badder'],
+  ['beautiful','more beautiful','most beautiful','beautifuller'],['hot','hotter','hottest','hoter'],['easy','easier','easiest','easyer'],['expensive','more expensive','most expensive','expensiver'],['small','smaller','smallest','more small']];
+const EN_PLUR = [['child','children',['childs','childrens']],['mouse','mice',['mouses','mices']],['tooth','teeth',['tooths','teeths']],['foot','feet',['foots','feets']],['woman','women',['womans','womens']],
+  ['man','men',['mans','mens']],['sheep','sheep',['sheeps','sheepes']],['box','boxes',['boxs','boxies']],['city','cities',['citys','cityes']],['knife','knives',['knifes','knifs']],['leaf','leaves',['leafs','leafes']],
+  ['baby','babies',['babys','babyes']],['dress','dresses',['dresss','dressies']]];
+const EN_GRAM = [
+  [1, 'She ___ to school every day.', 'goes', ['go','going','gone']],
+  [1, 'They ___ football yesterday.', 'played', ['play','plays','playing']],
+  [1, 'There ___ two cats in the garden.', 'are', ['is','am','be']],
+  [1, 'I ___ watching TV now.', 'am', ['is','are','be']],
+  [1, 'She can ___ very well.', 'sing', ['sings','singing','sang']],
+  [2, 'He ___ like fish.', "doesn't", ["don't","isn't","aren't"]],
+  [2, 'We ___ to Alexandria last summer.', 'went', ['go','goes','going']],
+  [2, 'This bag is ___ than that one.', 'bigger', ['big','biggest','more big']],
+  [2, 'Roaa is the ___ girl in her class.', 'tallest', ['tall','taller','more tall']],
+  [2, '___ you like ice cream?', 'Do', ['Does','Is','Are']],
+  [2, 'Where ___ you yesterday?', 'were', ['was','are','is']],
+  [3, 'I have lived in Cairo ___ 2015.', 'since', ['for','from','at']],
+  [3, 'She has ___ finished her homework.', 'already', ['yet','ago','since']],
+  [3, 'If it rains, we ___ stay at home.', 'will', ['would','are','did']],
+  [3, 'The dress ___ by a famous designer.', 'was made', ['made','was make','is making']],
+  [3, 'He was reading when the phone ___.', 'rang', ['rings','ringing','was ring']],
+  [3, 'You ___ wear a seat belt in the car.', 'must', ['mustn\'t','can\'t','don\'t']]
+];
+const EN_VOC = [['library','مكتبة'],['hospital','مستشفى'],['museum','متحف'],['desert','صحراء'],['island','جزيرة'],['scientist','عالِم'],['journey','رحلة'],['healthy','صحي'],
+  ['dangerous','خطير'],['invent','يخترع'],['environment','البيئة'],['pollution','التلوث'],['weather','الطقس'],['designer','مصمم'],['fabric','قماش'],['market','سوق']];
+
+/* [level, question, answer, wrong x3] */
+const SCI = [
+  [1,'أصغر وحدة بناء في جسم الكائن الحي هي…','الخلية',['العضو','النسيج','الجهاز']],
+  [1,'النبات بياخد غاز إيه علشان يعمل البناء الضوئي؟','ثاني أكسيد الكربون',['الأكسجين','النيتروجين','الهيدروجين']],
+  [1,'النبات بيطلّع غاز إيه في البناء الضوئي؟','الأكسجين',['ثاني أكسيد الكربون','النيتروجين','بخار الماء']],
+  [1,'الماء النقي بيغلي عند كام درجة سيليزيوس؟','١٠٠',['٥٠','٠','٢٠٠']],
+  [1,'الماء بيتجمد عند كام درجة سيليزيوس؟','صفر',['١٠','١٠٠','٥٠']],
+  [1,'تحول المادة من الحالة الصلبة للسائلة اسمه…','الانصهار',['التجمد','التكثف','التبخر']],
+  [1,'العضو اللي بيضخ الدم في جسم الإنسان هو…','القلب',['الرئتين','المعدة','الكبد']],
+  [1,'المغناطيس بيجذب…','الحديد',['الخشب','البلاستيك','الزجاج']],
+  [1,'المصدر الأساسي للطاقة على الأرض هو…','الشمس',['القمر','البترول','الرياح']],
+  [1,'الحيوان اللي بياكل نباتات بس اسمه…','آكل عشب',['آكل لحوم','آكل كل شيء','مُحلِّل']],
+  [1,'جهاز بنقيس بيه درجة الحرارة…','الترمومتر',['الميزان','المسطرة','البوصلة']],
+  [1,'القمر بيدور حوالين…','الأرض',['الشمس','المريخ','المشتري']],
+  [2,'تحول بخار الماء لسائل اسمه…','التكثف',['التبخر','الانصهار','التجمد']],
+  [2,'أقرب كوكب للشمس هو…','عطارد',['الزهرة','الأرض','المريخ']],
+  [2,'أكبر كوكب في المجموعة الشمسية هو…','المشتري',['زحل','الأرض','نبتون']],
+  [2,'الكوكب اللي بيتسمى الكوكب الأحمر هو…','المريخ',['الزهرة','عطارد','المشتري']],
+  [2,'دوران الأرض حول نفسها بيعمل…','الليل والنهار',['الفصول الأربعة','الخسوف','المد والجزر']],
+  [2,'دوران الأرض حوالين الشمس بيعمل…','الفصول الأربعة',['الليل والنهار','الزلازل','البراكين']],
+  [2,'الضوء بينتقل في…','خطوط مستقيمة',['خطوط منحنية','دواير','زوايا قايمة']],
+  [2,'تبادل الغازات في جسم الإنسان بيحصل في…','الرئتين',['القلب','المعدة','الكليتين']],
+  [2,'المادة اللي بتدي النبات اللون الأخضر…','الكلوروفيل (اليخضور)',['النشا','السكر','الماء']],
+  [2,'الأقطاب المغناطيسية المتشابهة…','تتنافر',['تتجاذب','مبيحصلش حاجة','تتحول لحديد']],
+  [2,'مادة موصلة جيدة للكهرباء…','النحاس',['الخشب','البلاستيك','المطاط']],
+  [3,'مادة عازلة للكهرباء…','البلاستيك',['النحاس','الحديد','الألومنيوم']],
+  [3,'اللمبة بتنوّر لما الدايرة الكهربية تكون…','مغلقة',['مفتوحة','مقطوعة','من غير بطارية']],
+  [3,'الصوت مبينتقلش في…','الفراغ',['الهواء','الماء','الحديد']],
+  [3,'الطاقة المخزنة في الطعام اسمها…','طاقة كيميائية',['طاقة حركية','طاقة صوتية','طاقة ضوئية']],
+  [3,'الخفاش من…','الثدييات',['الطيور','الزواحف','البرمائيات']],
+  [3,'عدد عظام جسم الإنسان البالغ تقريبًا…','٢٠٦',['١٠٠','٣٠٠','١٥٠']],
+  [3,'الحيوانات اللي ليها عمود فقري اسمها…','الفقاريات',['اللافقاريات','الحشرات','الرخويات']],
+  [3,'غاز ضروري لحدوث الاحتراق…','الأكسجين',['ثاني أكسيد الكربون','النيتروجين','الهيليوم']],
+  [3,'الكائنات اللي بتصنع غذاءها بنفسها…','النباتات الخضراء',['الحيوانات','الفطريات','الإنسان']]
+];
+const SOC = [
+  [1,'عاصمة مصر هي…','القاهرة',['الإسكندرية','أسوان','الجيزة']],
+  [1,'أطول نهر في العالم…','نهر النيل',['نهر الأمازون','نهر الفرات','نهر الأردن']],
+  [1,'نهر النيل بيصب في…','البحر المتوسط',['البحر الأحمر','المحيط الهندي','بحيرة ناصر']],
+  [1,'البحر اللي في شمال مصر…','البحر المتوسط',['البحر الأحمر','بحر العرب','البحر الأسود']],
+  [1,'البحر اللي في شرق مصر…','البحر الأحمر',['البحر المتوسط','بحر العرب','المحيط الأطلسي']],
+  [1,'الدولة اللي جنوب مصر…','السودان',['ليبيا','فلسطين','السعودية']],
+  [1,'الدولة اللي غرب مصر…','ليبيا',['السودان','الأردن','تونس']],
+  [1,'معظم أرض مصر في قارة…','أفريقيا',['آسيا','أوروبا','أستراليا']],
+  [1,'الشمس بتشرق من ناحية…','الشرق',['الغرب','الشمال','الجنوب']],
+  [1,'الكتابة المصرية القديمة اسمها…','الهيروغليفية',['المسمارية','اللاتينية','العربية']],
+  [1,'السد العالي في محافظة…','أسوان',['الأقصر','قنا','المنيا']],
+  [1,'عاصمة السعودية…','الرياض',['جدة','مكة','الدمام']],
+  [2,'شبه جزيرة سيناء في قارة…','آسيا',['أفريقيا','أوروبا','أمريكا']],
+  [2,'قناة السويس بتوصّل بين…','البحر المتوسط والبحر الأحمر',['البحر المتوسط والبحر الأسود','البحر الأحمر وبحر العرب','نهر النيل والبحر الأحمر']],
+  [2,'البحيرة اللي اتكونت ورا السد العالي…','بحيرة ناصر',['بحيرة قارون','بحيرة المنزلة','بحيرة مريوط']],
+  [2,'الملك اللي وحّد القطرين…','مينا',['خوفو','أحمس','رمسيس الثاني']],
+  [2,'الهرم الأكبر في الجيزة بناه الملك…','خوفو',['خفرع','منكاورع','مينا']],
+  [2,'العالم اللي فك رموز حجر رشيد…','شامبليون',['هوارد كارتر','نيوتن','ابن سينا']],
+  [2,'القائد اللي طرد الهكسوس من مصر…','أحمس',['مينا','تحتمس الثالث','خوفو']],
+  [2,'أكبر صحاري مصر…','الصحراء الغربية',['الصحراء الشرقية','صحراء سيناء','الصحراء الكبرى العربية']],
+  [2,'عاصمة الأردن…','عمّان',['دمشق','بيروت','بغداد']],
+  [2,'عاصمة المغرب…','الرباط',['الدار البيضاء','تونس','الجزائر']],
+  [2,'عاصمة السودان…','الخرطوم',['أم درمان','جوبا','طرابلس']],
+  [3,'الملكة اللي بنت معبد الدير البحري…','حتشبسوت',['نفرتيتي','كليوباترا','نفرتاري']],
+  [3,'المكتشف اللي لقى مقبرة توت عنخ آمون…','هوارد كارتر',['شامبليون','نابليون','ماريت']],
+  [3,'نصر أكتوبر كان سنة…','١٩٧٣',['١٩٦٧','١٩٥٢','١٩٥٦']],
+  [3,'قناة السويس اتفتحت أول مرة سنة…','١٨٦٩',['١٩٥٦','١٨٠٥','١٩٧٣']],
+  [3,'عاصمة مصر في الدولة الحديثة (الأقصر حاليًا) كان اسمها…','طيبة',['منف','الإسكندرية','الفسطاط']],
+  [3,'القائد اللي فتح مصر في العصر الإسلامي…','عمرو بن العاص',['صلاح الدين','جوهر الصقلي','محمد علي']],
+  [3,'أول جامع اتبنى في مصر وأفريقيا…','جامع عمرو بن العاص',['الجامع الأزهر','جامع ابن طولون','جامع محمد علي']],
+  [3,'القائد اللي بنى الجامع الأزهر…','جوهر الصقلي',['عمرو بن العاص','صلاح الدين','أحمد بن طولون']],
+  [3,'أعلى قمة جبل في مصر…','جبل سانت كاترين',['جبل موسى','جبل المقطم','جبل علبة']],
+  [3,'عاصمة لبنان…','بيروت',['دمشق','عمّان','طرابلس']],
+  [3,'عاصمة العراق…','بغداد',['البصرة','دمشق','الكويت']]
+];
+
+/* ---------------- generators ---------------- */
+const bankQ = (sub, key, label, text, ans, wrong, cls, extra) => Object.assign({ sub, key, label, text, say:text.replace(/<[^>]+>/g, ''), visual:'', options:tOpts(ans, wrong, cls), check:{ type:'bank', a:ans } }, extra || {});
+function factQ(sub, bank, lvl){
+  const pool = bank.filter(x => x[0] <= lvl), cur = pool.filter(x => x[0] === lvl);
+  const it = (cur.length && Math.random() < .65) ? pick(cur) : pick(pool);
+  return bankQ(sub, sub + ':' + it[1], it[1].replace('…', ''), it[1], it[2], it[3], 'ropt-t');
+}
+const RGEN = {
+  /* ---- Maths: grade 5 review ---- */
+  rMul(){ const a = randInt(12, 49), b = randInt(11, 29), ans = a * b;
+    return { sub:'math', key:'mu' + a + 'x' + b, label:`${fmt(a)} × ${fmt(b)}`, text:eqH(`${fmt(a)} × ${fmt(b)} = ؟`), say:`${a} في ${b} يساوي كام؟`, visual:'',
+      options:nOpts(ans, [a * (b - 1), ans + 10, ans - 10, (a + 1) * b, ans + 100]), check:{ type:'mul', a, b } }; },
+  rDiv(){ const b = randInt(3, 12), q = randInt(12, 60), a = b * q;
+    return { sub:'math', key:'dv' + a + '/' + b, label:`${fmt(a)} ÷ ${fmt(b)}`, text:eqH(`${fmt(a)} ÷ ${fmt(b)} = ؟`), say:`${a} على ${b} يساوي كام؟`, visual:'',
+      options:nOpts(q, [q + 1, q - 1, q + 10, q - 10]), check:{ type:'div', a, b } }; },
+  rFracSame(){ const n = pick([5, 6, 7, 8, 9, 10, 12]), a = randInt(1, n - 2), b = randInt(1, n - 1 - a), ans = fr(a + b, n);
+    return { sub:'math', key:'fs' + a + '+' + b + '/' + n, label:`كسور: ${fmt(a)}/${fmt(n)} + ${fmt(b)}/${fmt(n)}`, text:eqH(`${fracH(a, n)} + ${fracH(b, n)} = ؟`), say:`${a} على ${n} زائد ${b} على ${n}، يساوي كام؟ (في أبسط صورة)`, visual:'<span class="hint">في أبسط صورة</span>',
+      options:fOpts(ans, [[a + b, 2 * n], [a * b, n], [Math.abs(a - b) || 1, n], [a + b + 1, n]]), check:{ type:'fracAdd', a, b, n } }; },
+  rDecAdd(){ const x1 = randInt(11, 99), y1 = randInt(101, 999), ans = r2((x1 * 10 + y1) / 100), x = x1 / 10, y = y1 / 100;
+    return { sub:'math', key:'da' + x1 + '+' + y1, label:`كسور عشرية: ${fmt(x)} + ${fmt(y)}`, text:eqH(`${fmt(x)} + ${fmt(y)} = ؟`), say:`${x} زائد ${y} يساوي كام؟`, visual:'',
+      options:nOpts(ans, [(x1 + y1) / 100, ans + 0.1, ans - 1, ans + 1, (x1 * 10 + y1) / 10]), check:{ type:'decAdd', x1, y1 } }; },
+  rPlace(){ let ds; do { ds = shuffle([1,2,3,4,5,6,7,8,9]).slice(0, 5); } while (false);
+    const N = +ds.join(''), k = randInt(0, 4), d = ds[4 - k], ans = d * Math.pow(10, k);
+    return { sub:'math', key:'pv' + N + ':' + k, label:'القيمة المكانية', text:`قيمة الرقم <b>${fmt(d)}</b> في العدد <b>${fmt(N)}</b>؟`, say:`قيمة الرقم ${d} في العدد ${N} كام؟`, visual:'',
+      options:nOpts(ans, [d * Math.pow(10, k + 1), d * Math.pow(10, Math.max(0, k - 1)), d, d * Math.pow(10, k + 2)].filter(x => x !== ans)), check:{ type:'place', N, k } }; },
+  rRound(){ let t; do { t = randInt(101, 999); } while (t % 10 === 5); const x = t / 10, ans = Math.round(x);
+    return { sub:'math', key:'rd' + t, label:`تقريب ${fmt(x)}`, text:`قرّبي العدد <b>${fmt(x)}</b> لأقرب عدد صحيح`, say:`قربي العدد ${x} لأقرب عدد صحيح`, visual:'',
+      options:nOpts(ans, [ans + 1, ans - 1, ans + 10, t]), check:{ type:'round', t } }; },
+  rPerim(){ const l = randInt(5, 15), w = randInt(2, l - 1), ans = 2 * (l + w);
+    return { sub:'math', key:'pr' + l + 'x' + w, label:'محيط المستطيل', text:'محيط المستطيل ده كام سم؟', say:`مستطيل طوله ${l} سنتيمتر وعرضه ${w} سنتيمتر، محيطه كام؟`,
+      visual:`<svg viewBox="0 0 220 120" class="rfig"><rect x="30" y="20" width="160" height="70" fill="#fce4ec" stroke="#ad1457" stroke-width="3"/><text x="110" y="112" text-anchor="middle">${fmt(l)} سم</text><text x="15" y="60" text-anchor="middle">${fmt(w)}</text></svg>`,
+      options:nOpts(ans, [l * w, l + w, 2 * l + w, ans + 2]), check:{ type:'perim', l, w } }; },
+  /* ---- Maths: grade 6 ---- */
+  rGcf(){ const g = randInt(2, 9), [m, n] = coprimePair(2, 9), a = g * m, b = g * n;
+    return { sub:'math', key:'gc' + a + ',' + b, label:`ع.م.أ (${fmt(a)}، ${fmt(b)})`, text:`العامل المشترك الأكبر (ع.م.أ) للعددين <b>${fmt(a)}</b> و <b>${fmt(b)}</b>؟`, say:`العامل المشترك الأكبر للعددين ${a} و ${b}؟`, visual:'',
+      options:nOpts(g, [m, n, 1, lcm(a, b), Math.abs(a - b)].filter(x => x !== g)), check:{ type:'gcf', a, b } }; },
+  rLcm(){ let a, b; do { a = randInt(2, 12); b = randInt(2, 12); } while (a === b || lcm(a, b) > 72 || a % b === 0 || b % a === 0);
+    const ans = lcm(a, b);
+    return { sub:'math', key:'lc' + a + ',' + b, label:`م.م.أ (${fmt(a)}، ${fmt(b)})`, text:`المضاعف المشترك الأصغر (م.م.أ) للعددين <b>${fmt(a)}</b> و <b>${fmt(b)}</b>؟`, say:`المضاعف المشترك الأصغر للعددين ${a} و ${b}؟`, visual:'',
+      options:nOpts(ans, [a * b, ans * 2, a + b, gcd(a, b)].filter(x => x !== ans)), check:{ type:'lcm', a, b } }; },
+  rRatio(){ const g = randInt(2, 8), [m, n] = coprimePair(1, 9), a = g * m, b = g * n;
+    const R2 = (x, y) => `<span class="ratio">${fmt(x)} : ${fmt(y)}</span>`, key = (x, y) => x + ':' + y;
+    const wrong = [[n, m], [m, n + 1], [m + 1, n], [m * 2, n]].filter(([x, y]) => x * n !== y * m).filter((p, i, A) => A.findIndex(q => q[0] === p[0] && q[1] === p[1]) === i).slice(0, 3);
+    return { sub:'math', key:'ra' + a + ':' + b, label:`تبسيط النسبة ${fmt(a)}:${fmt(b)}`, text:`أبسط صورة للنسبة ${R2(a, b)}؟`, say:`أبسط صورة للنسبة ${a} إلى ${b}؟`, visual:'',
+      options:[opt(R2(m, n), 1, key(m, n)), ...wrong.map(([x, y]) => opt(R2(x, y), 0, key(x, y)))], check:{ type:'ratio', a, b } }; },
+  rPct(){ const p = pick([10, 20, 25, 50, 75, 5, 15, 30, 40]), unit = 100 / gcd(p, 100), N = unit * randInt(1, Math.max(1, Math.floor(400 / unit))), ans = N * p / 100;
+    return { sub:'math', key:'pc' + p + ':' + N, label:`${fmt(p)}${PCT()} من ${fmt(N)}`, text:eqH(`${fmt(p)}${PCT()} من ${fmt(N)} = ؟`), say:`${p} في المية من ${N} يساوي كام؟`, visual:'',
+      options:nOpts(ans, [N * p / 10, N - ans, ans * 2, p, ans + 5]), check:{ type:'pct', p, N } }; },
+  rOrder(){ const form = randInt(0, 3); let a, b, c, txt, ans, wrong, say;
+    if (form === 0){ a = randInt(2, 9); b = randInt(2, 9); c = randInt(2, 9); ans = a + b * c; wrong = (a + b) * c; txt = `${fmt(a)} + ${fmt(b)} × ${fmt(c)}`; say = `${a} زائد ${b} في ${c}`; }
+    else if (form === 1){ a = randInt(2, 9); b = randInt(2, 9); c = randInt(2, 6); ans = (a + b) * c; wrong = a + b * c; txt = `(${fmt(a)} + ${fmt(b)}) × ${fmt(c)}`; say = `قوس ${a} زائد ${b} قفل القوس في ${c}`; }
+    else if (form === 2){ a = randInt(3, 9); b = randInt(2, 9); c = randInt(2, a * b - 1); ans = a * b - c; wrong = a * (b - c); txt = `${fmt(a)} × ${fmt(b)} − ${fmt(c)}`; say = `${a} في ${b} ناقص ${c}`; }
+    else { c = randInt(2, 6); b = c * randInt(2, 6); a = randInt(b / c + 1, 40); ans = a - b / c; wrong = (a - b) / c; txt = `${fmt(a)} − ${fmt(b)} ÷ ${fmt(c)}`; say = `${a} ناقص ${b} على ${c}`; }
+    return { sub:'math', key:'or' + form + ':' + a + ',' + b + ',' + c, label:'ترتيب العمليات', text:eqH(`${txt} = ؟`), say:say + '، يساوي كام؟', visual:'<span class="hint">افتكري ترتيب العمليات: الأقواس، الضرب والقسمة، الجمع والطرح</span>',
+      options:nOpts(ans, [wrong, ans + 1, ans - 2, ans + 10].filter(x => Number.isInteger(x))), check:{ type:'order', form, a, b, c } }; },
+  rFracMul(){ const b = randInt(2, 9), d = randInt(2, 9), a = randInt(1, b - 1), c = randInt(1, d - 1), ans = fr(a * c, b * d);
+    return { sub:'math', key:'fm' + a + b + c + d, label:'ضرب الكسور', text:eqH(`${fracH(a, b)} × ${fracH(c, d)} = ؟`), say:`${a} على ${b} في ${c} على ${d}، يساوي كام؟`, visual:'<span class="hint">في أبسط صورة</span>',
+      options:fOpts(ans, [[a + c, b + d], [a * d, b * c], [a * c, b + d], [a + c, b * d]]), check:{ type:'fracMul', a, b, c, d } }; },
+  rTri(){ let b, h; do { b = randInt(4, 20); h = randInt(3, 12); } while ((b * h) % 2);
+    const ans = b * h / 2;
+    return { sub:'math', key:'tr' + b + 'x' + h, label:'مساحة المثلث', text:'مساحة المثلث ده كام سم²؟', say:`مثلث طول قاعدته ${b} سنتيمتر وارتفاعه ${h} سنتيمتر، مساحته كام؟`,
+      visual:`<svg viewBox="0 0 220 130" class="rfig"><polygon points="30,100 190,100 120,15" fill="#ede7f6" stroke="#6a1b9a" stroke-width="3"/><line x1="120" y1="15" x2="120" y2="100" stroke="#6a1b9a" stroke-dasharray="5 4" stroke-width="2"/><text x="110" y="124" text-anchor="middle">القاعدة ${fmt(b)} سم</text><text x="160" y="62" text-anchor="middle">الارتفاع ${fmt(h)}</text></svg>`,
+      options:nOpts(ans, [b * h, b + h, ans + b, 2 * (b + h)]), check:{ type:'tri', b, h } }; },
+  rEq(){ const kind = randInt(0, 3); let a, c, ans, txt, say;
+    if (kind === 0){ a = randInt(3, 30); ans = randInt(2, 40); c = ans + a; txt = `س + ${fmt(a)} = ${fmt(c)}`; say = `س زائد ${a} يساوي ${c}، س تساوي كام؟`; }
+    else if (kind === 1){ a = randInt(3, 30); ans = randInt(a + 1, 60); c = ans - a; txt = `س − ${fmt(a)} = ${fmt(c)}`; say = `س ناقص ${a} يساوي ${c}، س تساوي كام؟`; }
+    else if (kind === 2){ a = randInt(2, 9); ans = randInt(2, 12); c = a * ans; txt = `${fmt(a)} × س = ${fmt(c)}`; say = `${a} في س يساوي ${c}، س تساوي كام؟`; }
+    else { a = randInt(2, 9); c = randInt(2, 12); ans = a * c; txt = `س ÷ ${fmt(a)} = ${fmt(c)}`; say = `س على ${a} يساوي ${c}، س تساوي كام؟`; }
+    const wrong = kind === 0 ? [c + a, c, a] : kind === 1 ? [c - a, c, a] : kind === 2 ? [c - a, c * a, c + a] : [c, a + c, Math.max(1, Math.round(c / a))];
+    return { sub:'math', key:'eq' + kind + ':' + a + '=' + c, label:'المعادلات', text:eqH(txt), say, visual:'<span class="hint">س تساوي كام؟</span>', options:nOpts(ans, wrong), check:{ type:'eq', kind, a, c } }; },
+  /* ---- Maths: grade 6 advanced ---- */
+  rRate(){ const n = randInt(2, 6), unit = randInt(5, 30), total = n * unit, T = pick([['متر قماش','المتر'], ['علب ألوان','العلبة'], ['كراسات','الكراسة']]);
+    const txt = `${n} ${T[0]} بـ ${total} جنيه. ${T[1]} بكام؟`;
+    return { sub:'math', key:'rt' + n + ':' + total + T[1], label:'معدل الوحدة', text:txt.replace(/\d+/g, x => fmt(x)), say:txt, visual:'',
+      options:nOpts(unit, [total * n, total - n, total + n, unit + n]), check:{ type:'div', a:total, b:n } }; },
+  rDiscount(){ const price = pick([80, 120, 160, 200, 240, 300, 400]), p = pick([10, 20, 25, 50]), ans = price * (100 - p) / 100;
+    const txt = `فستان سعره ${price} جنيه وعليه خصم ${p}${PCT()}. سعره بعد الخصم كام؟`;
+    return { sub:'math', key:'ds' + price + ':' + p, label:'الخصم', text:txt.replace(/\d+/g, x => fmt(x)), say:`فستان سعره ${price} جنيه وعليه خصم ${p} في المية. سعره بعد الخصم كام؟`, visual:'👗🏷️',
+      options:nOpts(ans, [price * p / 100, price + price * p / 100, price - p]), check:{ type:'discount', price, p } }; },
+  rMean(){ const k = pick([3, 4, 5]), m = randInt(6, 30); let arr;
+    do { arr = []; for (let i = 0; i < k - 1; i++) arr.push(Math.max(1, m + randInt(-8, 8))); arr.push(k * m - arr.reduce((s, x) => s + x, 0)); } while (arr[k - 1] < 1);
+    return { sub:'math', key:'mn' + arr.join(','), label:'المتوسط الحسابي', text:`المتوسط الحسابي للأعداد: <b>${arr.map(x => fmt(x)).join('، ')}</b>`, say:`المتوسط الحسابي للأعداد ${arr.join('، ')}؟`, visual:'',
+      options:nOpts(m, [k * m, m + 1, m - 1, Math.max(...arr)]), check:{ type:'mean', arr } }; },
+  rVol(){ const l = randInt(2, 10), w = randInt(2, 8), h = randInt(2, 8), ans = l * w * h;
+    return { sub:'math', key:'vo' + l + w + h, label:'حجم متوازي المستطيلات', text:`حجم علبة طولها ${fmt(l)} سم وعرضها ${fmt(w)} سم وارتفاعها ${fmt(h)} سم؟ (سم³)`, say:`حجم علبة طولها ${l} وعرضها ${w} وارتفاعها ${h} سنتيمتر؟`, visual:'📦',
+      options:nOpts(ans, [l * w, l + w + h, 2 * (l * w + l * h + w * h), ans + l]), check:{ type:'vol', l, w, h } }; },
+  rEq2(){ const a = randInt(2, 9), x = randInt(1, 12), b = randInt(1, 20), c = a * x + b;
+    return { sub:'math', key:'e2' + a + ',' + b + ',' + c, label:'معادلة بخطوتين', text:eqH(`${fmt(a)}س + ${fmt(b)} = ${fmt(c)}`), say:`${a} س زائد ${b} يساوي ${c}، س تساوي كام؟`, visual:'<span class="hint">س تساوي كام؟</span>',
+      options:nOpts(x, [c - b, (c + b) / a, x + 1, x + 2].filter(v => Number.isInteger(v))), check:{ type:'eq2', a, b, c } }; },
+  rFracDiv(){ const b = randInt(2, 9), d = randInt(2, 9), a = randInt(1, b - 1), c = randInt(1, d - 1), ans = fr(a * d, b * c);
+    return { sub:'math', key:'fd' + a + b + c + d, label:'قسمة الكسور', text:eqH(`${fracH(a, b)} ÷ ${fracH(c, d)} = ؟`), say:`${a} على ${b} مقسومة على ${c} على ${d}، يساوي كام؟`, visual:'<span class="hint">في أبسط صورة</span>',
+      options:fOpts(ans, [[a * c, b * d], [b * c, a * d], [a + c, b + d], [a * d, b + c]]), check:{ type:'fracDiv', a, b, c, d } }; },
+  rProp(){ const n1 = randInt(3, 5), per = randInt(2, 6), q1 = n1 * per, n2 = randInt(n1 + 1, 10), ans = n2 * per;
+    const txt = `لو ${n1} فساتين محتاجين ${q1} متر قماش، يبقى ${n2} فساتين محتاجين كام متر؟`;
+    return { sub:'math', key:'pp' + n1 + ':' + q1 + ':' + n2, label:'التناسب', text:txt.replace(/\d+/g, x => fmt(x)), say:txt, visual:'👗🧵',
+      options:nOpts(ans, [q1 + n2, q1 * n2, ans + per, ans - per]), check:{ type:'prop', n1, q1, n2 } }; },
+  /* ---- Arabic ---- */
+  rSyn(){ const [w, s] = pick(AR_SYN), wr = sample(AR_SYN, 3, x => x[1] === s).map(x => x[1]);
+    return bankQ('ar', 'syn' + w, `مرادف ${w}`, `مرادف كلمة <b>«${w}»</b> هو…`, s, wr, 'ropt-t'); },
+  rAnt(){ const [w, s] = pick(AR_ANT), wr = sample(AR_ANT, 3, x => x[1] === s || x[0] === w).map(x => x[1]);
+    return bankQ('ar', 'ant' + w, `مضاد ${w}`, `مضاد كلمة <b>«${w}»</b> هو…`, s, wr, 'ropt-t'); },
+  rPlural(){ const [w, s] = pick(AR_PL), wr = sample(AR_PL, 3, x => x[1] === s).map(x => x[1]);
+    return bankQ('ar', 'pl' + w, `جمع ${w}`, `جمع كلمة <b>«${w}»</b> هو…`, s, wr, 'ropt-t'); },
+  rSentType(){ const [t, k] = pick(AR_SENT);
+    return bankQ('ar', 'st' + t, `نوع جملة: ${t}`, `نوع الجملة: <b>«${t}»</b>`, 'جملة ' + k, ['جملة ' + (k === 'اسمية' ? 'فعلية' : 'اسمية'), 'شبه جملة'], 'ropt-t'); },
+  rIrab(){ const [t, w, role] = pick(AR_IRAB), all = ['مبتدأ', 'خبر', 'فاعل', 'مفعول به'];
+    return bankQ('ar', 'ir' + t + w, `إعراب ${w}`, `في جملة <b>«${t}»</b>… كلمة <b>«${w}»</b> إعرابها…`, role, all.filter(x => x !== role), 'ropt-t'); },
+  rDual(){ const [w, d, wr] = pick(AR_DUAL);
+    return bankQ('ar', 'du' + w, `مثنى ${w}`, `مثنى كلمة <b>«${w}»</b> في حالة الرفع…`, d, wr, 'ropt-t'); },
+  rSound(){ const [w, d, wr] = pick(AR_SOUND);
+    return bankQ('ar', 'so' + w, `جمع مذكر سالم ${w}`, `جمع كلمة <b>«${w}»</b> جمع مذكر سالم في حالة الرفع…`, d, wr, 'ropt-t'); },
+  rSigns(){ const [q, a, wr] = pick(AR_SIGNS);
+    return bankQ('ar', 'sg' + q, q.replace('؟', ''), q, a, wr, 'ropt-t'); },
+  /* ---- English ---- */
+  rVocab(){ const [w, m] = pick(EN_VOC), wr = sample(EN_VOC, 3, x => x[0] === w).map(x => x[1]);
+    return Object.assign(bankQ('en', 'vo' + w, w, `<span class="enq">What does <b>${w}</b> mean?</span><br><span class="hint">معنى الكلمة بالعربي</span>`, m, wr, 'ropt-t'), { say:[{ t:'What does', en:1 }, { t:w, en:1 }, { t:'mean?', en:1 }] }); },
+  rPast(){ const v = pick(EN_PAST), base = v[0], past = v[1], pp = v[2];
+    const cand = [pp && pp !== past && pp !== base ? pp : null, base + 'ed', base + 'ing', base + 's'].filter(Boolean).filter(x => x !== past).slice(0, 3);
+    return Object.assign(bankQ('en', 'pa' + base, `past of ${base}`, `<span class="enq">What is the past of <b>${base}</b>?</span>`, past, cand, 'ropt-t en-t'), { say:[{ t:'What is the past of', en:1 }, { t:base, en:1 }] }); },
+  rComp(){ const c = pick(EN_COMP), sup = Math.random() < .4;
+    const ans = sup ? c[2] : c[1], wr = (sup ? [c[1], c[0], 'most ' + c[0]] : [c[2], c[3], c[0]]).filter(x => x !== ans);
+    const qt = sup ? `superlative of` : `comparative of`;
+    return Object.assign(bankQ('en', 'co' + c[0] + sup, `${qt} ${c[0]}`, `<span class="enq">The ${qt} <b>${c[0]}</b> is…</span>`, ans, [...new Set(wr)].slice(0, 3), 'ropt-t en-t'), { say:[{ t:'The ' + qt, en:1 }, { t:c[0], en:1 }] }); },
+  rPlur(){ const [s, p, wr] = pick(EN_PLUR);
+    return Object.assign(bankQ('en', 'pl' + s, `plural of ${s}`, `<span class="enq">The plural of <b>${s}</b> is…</span>`, p, wr.concat([s]).filter(x => x !== p).slice(0, 3), 'ropt-t en-t'), { say:[{ t:'The plural of', en:1 }, { t:s, en:1 }] }); },
+  rGram(lvl){ const pool = EN_GRAM.filter(x => x[0] <= (lvl || 2)), cur = pool.filter(x => x[0] === lvl), g = (cur.length && Math.random() < .65) ? pick(cur) : pick(pool);
+    return Object.assign(bankQ('en', 'gr' + g[1], g[1], `<span class="enq">${g[1].replace('___', '<span class="blank">____</span>')}</span>`, g[2], g[3], 'ropt-t en-t'), { say:[{ t:g[1].replace('___', 'blank'), en:1 }] }); },
+  /* ---- Science & social studies ---- */
+  rSci(lvl){ return factQ('sci', SCI, lvl || 2); },
+  rSoc(lvl){ return factQ('soc', SOC, lvl || 2); }
+};
+
+const R_STAGES = [
+  { id:'math', name:'استوديو الرياضيات', short:'الرياضيات', ic:'➗', col:'#ec407a', gens:{
+      1:['rMul','rDiv','rFracSame','rDecAdd','rPlace','rRound','rPerim'],
+      2:['rGcf','rLcm','rRatio','rPct','rOrder','rFracMul','rTri','rEq'],
+      3:['rPct','rOrder','rRate','rDiscount','rMean','rVol','rEq2','rFracDiv','rProp'] } },
+  { id:'ar', name:'استوديو اللغة العربية', short:'العربي', ic:'ض', col:'#ab47bc', gens:{
+      1:['rSyn','rAnt','rPlural','rSentType'],
+      2:['rSyn','rAnt','rPlural','rSentType','rIrab','rDual'],
+      3:['rIrab','rIrab','rDual','rSound','rSigns','rAnt','rSyn'] } },
+  { id:'en', name:'English Studio', short:'English', ic:'Aa', col:'#5c6bc0', gens:{
+      1:['rVocab','rVocab','rPlur','rPast','rGram'],
+      2:['rPast','rPast','rComp','rPlur','rGram','rGram','rVocab'],
+      3:['rPast','rComp','rComp','rGram','rGram','rGram','rPlur'] } },
+  { id:'sci', name:'استوديو العلوم', short:'العلوم', ic:'🔬', col:'#26a69a', gens:{ 1:['rSci'], 2:['rSci'], 3:['rSci'] } },
+  { id:'soc', name:'استوديو الدراسات', short:'الدراسات', ic:'🌍', col:'#ff8a65', gens:{ 1:['rSoc'], 2:['rSoc'], 3:['rSoc'] } }
+];
+const R_LEVEL_NAMES = ['', 'مراجعة خامسة', 'سادسة', 'سادسة متقدم'];
+function rLevel(i){ const d = R.settings.diff; if (d === 1 || d === 2 || d === 3) return d; return R.level[R_STAGES[i].id] || 2; }
+function rMakeRound(i, lvl){
+  lvl = lvl || rLevel(i);
+  const gens = R_STAGES[i].gens[lvl], seen = new Set(), qs = [];
+  let guard = 0;
+  while (qs.length < 10 && guard++ < 800){
+    const q = RGEN[pick(gens)](lvl);
+    if (seen.has(q.key)) continue;
+    seen.add(q.key); q.options = shuffle(q.options); qs.push(q);
+  }
+  return qs;
+}
+const rDesignsFor = i => R.designs.filter(d => d.s === i).length;
+
+/* ---------------- screens ---------------- */
+function renderRHome(){
+  $('#rGems').textContent = fmt(R.gems);
+  $('#rDesigns').textContent = fmt(R.designs.length);
+  $('#rHero').innerHTML = girlStandalone();
+  $('#rHero svg').addEventListener('click', () => { Snd.init(); Snd.sparkle(); confetti(18); });
+  const box = $('#rStages'); box.innerHTML = '';
+  R_STAGES.forEach((st, i) => {
+    const b = document.createElement('button'), n = rDesignsFor(i), lv = rLevel(i);
+    b.className = 'r-card'; b.style.setProperty('--c', st.col);
+    b.innerHTML = `${n ? `<span class="cups">👗 ${fmt(n)}</span>` : ''}<span class="ic">${st.ic}</span><span class="nm">${st.name}</span><span class="lvl">${'💎'.repeat(lv)} ${R_LEVEL_NAMES[lv]}</span>`;
+    b.addEventListener('click', () => { Snd.init(); Snd.tap(); rStart(i); });
+    box.appendChild(b);
+  });
+}
+$('#rSwitch').addEventListener('click', () => { Snd.tap(); RG = null; show('intro'); });
+$('#ySwitch').addEventListener('click', () => { Snd.tap(); G = null; show('intro'); });
+$('#rGoAlbum').addEventListener('click', () => { Snd.init(); Snd.tap(); show('ralbum'); });
+$('#rGoLocker').addEventListener('click', () => { Snd.init(); Snd.tap(); show('rlocker'); });
+$('#rGoParent').addEventListener('click', () => { Snd.init(); Snd.tap(); parentKid = 'roaa'; gate(() => show('parent')); });
+document.querySelectorAll('.rback').forEach(b => b.addEventListener('click', () => { Snd.tap(); show('rhome'); }));
+
+/* ---------------- play ---------------- */
+let RG = null;
+const R_WIN = ['✨ برافو يا رؤى!', '💖 إجابة شيك!', '🌟 مصممة عبقرية!', '👏 صح كده!', '💎 جميل جدًا!'];
+function rBuildScene(){
+  const C = rColl();
+  $('#rScene').innerHTML = `
+  <defs><linearGradient id="rbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbd3e9"/><stop offset="1" stop-color="#ead7fb"/></linearGradient>
+    <radialGradient id="rspot" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <rect width="400" height="250" fill="url(#rbg)"/>
+  <path d="M0 0 H62 Q48 60 58 125 Q40 190 52 250 H0 Z" fill="#ec407a"/><path d="M18 0 Q10 125 22 250" stroke="#d81b60" stroke-width="4" fill="none"/><path d="M38 0 Q30 125 40 250" stroke="#d81b60" stroke-width="4" fill="none"/>
+  <path d="M400 0 H338 Q352 60 342 125 Q360 190 348 250 H400 Z" fill="#ec407a"/><path d="M382 0 Q390 125 378 250" stroke="#d81b60" stroke-width="4" fill="none"/><path d="M362 0 Q370 125 360 250" stroke="#d81b60" stroke-width="4" fill="none"/>
+  <path d="M0 0 H400 V16 Q300 30 200 16 Q100 30 0 16 Z" fill="#c2185b"/>
+  <rect y="208" width="400" height="42" fill="#f8bbd0"/><polygon points="150,250 250,250 236,208 164,208" fill="#fff" opacity=".75"/>
+  <ellipse cx="200" cy="120" rx="95" ry="120" fill="url(#rspot)" opacity=".55"/>
+  <g transform="rotate(-5 98 110)"><rect x="66" y="58" width="70" height="92" rx="4" fill="#fff" stroke="#e0bcd0"/>
+    <rect x="74" y="68" width="22" height="22" fill="${C.dress}"/><rect x="100" y="68" width="22" height="22" fill="${C.acc}"/><rect x="74" y="94" width="22" height="22" fill="${C.patC}" stroke="#eee"/><rect x="100" y="94" width="22" height="22" fill="${C.shoe}"/>
+    <path d="M76 128 Q96 120 116 132" stroke="#9e9e9e" stroke-width="1.5" fill="none"/><text x="101" y="145" font-size="9" text-anchor="middle" fill="#ad1457" font-family="Tahoma,Arial">${C.name.replace(/[^؀-ۿ ]/g, '').trim()}</text></g>
+  <line x1="268" y1="66" x2="332" y2="66" stroke="#8d6e63" stroke-width="4"/><line x1="272" y1="66" x2="272" y2="150" stroke="#8d6e63" stroke-width="3"/><line x1="328" y1="66" x2="328" y2="150" stroke="#8d6e63" stroke-width="3"/>
+  ${[284, 300, 316].map((x, k) => `<path d="M${x} 66 l0 6" stroke="#757575"/><path d="M${x - 8} 74 L${x + 8} 74 L${x + 12} 112 L${x - 12} 112 Z" fill="${[C.dress, C.acc, '#fff'][k]}" stroke="rgba(0,0,0,.15)"/>`).join('')}
+  <g transform="translate(150 20)"><g id="rGirl" class="anim" style="transform-origin:50% 100%">${girlSVG({ pieces:RG ? RG.pieces : new Set() })}</g></g>`;
+}
+function rRenderGirl(newPiece){ const g = $('#rGirl'); if (g) g.innerHTML = girlSVG({ pieces:RG.pieces, newPiece }); }
+function rStart(i){
+  if (timeIsUp(R)){ showRest(); return; }
+  RG = { stage:i, lvl:rLevel(i), qs:rMakeRound(i), i:0, results:[], busy:false, gems:0, pieces:new Set() };
+  show('rplay'); rBuildScene(); $('#rBanner').className = ''; $('#rBanner').innerHTML = ''; rShowQ(false);
+  Snd.sparkle();
+  rSay(`يلا نصمم في ${R_STAGES[i].name}`).then(() => { if (RG && RG.i === 0 && current === 'rplay' && !RG.busy) rAsk(); });
+}
+function rDots(){
+  const d = $('#rDots'); d.innerHTML = '';
+  for (let k = 0; k < 10; k++){ const i = document.createElement('i'), r = RG.results[k];
+    if (r === 'first'){ i.className = 'done'; i.textContent = '💎'; } else if (r === 'later'){ i.className = 'done'; i.textContent = '✔'; } else if (k === RG.i) i.className = 'cur';
+    d.appendChild(i); }
+}
+function rShowQ(speak){
+  const q = RG.qs[RG.i]; q.tried = false;
+  $('#rQtext').innerHTML = q.text;
+  $('#rQvis').innerHTML = q.visual || '';
+  const box = $('#rOpts'); box.innerHTML = ''; box.classList.toggle('three', q.options.length === 3);
+  q.options.forEach(o => { const b = document.createElement('button'); b.className = 'ropt'; b.innerHTML = o.html; b.dataset.ok = o.ok ? '1' : '0'; b.addEventListener('click', () => rAnswer(b, o)); box.appendChild(b); });
+  rDots();
+  if (speak !== false) rAsk();
+}
+function rAsk(force){ if (RG) return rSay(RG.qs[RG.i].say, force); }
+$('#rRead').addEventListener('click', () => { Snd.init(); rAsk(true); });
+$('#rQuit').addEventListener('click', () => { Snd.tap(); RG = null; show('rhome'); });
+function rBanner(html, cls){ const b = $('#rBanner'); b.className = ''; void b.offsetWidth; b.innerHTML = html; b.className = 'show ' + (cls || ''); }
+function rGems(n){
+  const before = R.gems; R.gems += n;
+  [].concat(R_COLL.map(x => ['مجموعة جديدة', x]), R_HAIR.map(x => ['تسريحة جديدة', x]), R_HAIRC.map(x => ['لون شعر جديد', x]))
+    .forEach(([k, it]) => { if (it.need > before && it.need <= R.gems) toastQ.push(`🎉 فتحتي ${k}: ${it.name}!<br><small>روحي الاستوديو 💄</small>`); });
+  runToasts();
+}
+async function rAnswer(btn, o){
+  if (!RG || RG.busy || btn.disabled) return;
+  RG.busy = true; Snd.init(); Speech.stop();
+  const q = RG.qs[RG.i];
+  document.querySelectorAll('.ropt').forEach(b => b.style.pointerEvents = 'none');
+  if (o.ok){
+    btn.classList.add('right');
+    const piece = PIECES[RG.pieces.size]; RG.pieces.add(piece); rRenderGirl(piece);
+    Snd.sparkle();
+    rBanner(`${pick(R_WIN)}<span class="rev">${PIECE_NAMES[piece]} اتضاف للتصميم</span>`);
+    confetti(14);
+    const st = R.stats[q.sub] || (R.stats[q.sub] = { q:0, f:0 }); st.q++;
+    if (!q.tried){ st.f++; RG.gems++; rGems(1); RG.results[RG.i] = 'first'; } else RG.results[RG.i] = 'later';
+    rSave(); rDots();
+    await sleep(1500);
+    if (!RG) return;
+    $('#rBanner').className = '';
+    RG.i++;
+    if (RG.i >= 10){ rFinish(); return; }
+    if (timeIsUp(R)){ RG.busy = false; showRest(); return; }
+    rShowQ(); RG.busy = false;
+  } else {
+    if (!q.tried){ q.tried = true; const m = R.mistakes[q.label] || (R.mistakes[q.label] = { n:0, s:q.sub }); m.n++; rSave(); }
+    Snd.save();
+    anim($('#rGirl'), [{ transform:'rotate(0)' }, { transform:'rotate(-4deg)' }, { transform:'rotate(4deg)' }, { transform:'rotate(0)' }], { duration:450, fill:'none' });
+    rBanner('🧵 قربتي! جربي تاني 💪', 'miss');
+    btn.disabled = true;
+    await sleep(1100);
+    if (!RG) return;
+    $('#rBanner').className = '';
+    document.querySelectorAll('.ropt').forEach(b => b.style.pointerEvents = '');
+    RG.busy = false;
+  }
+}
+async function rFinish(){
+  const st = RG.stage;
+  rBanner('👗 عرض أزياء رؤى ✨', 'show-time');
+  const g = $('#rGirl'), fx = $('#fx');
+  anim(g, [{ transform:'translateY(0) scale(1)' }, { transform:'translateY(4px) scale(1.04) rotate(-2deg)', offset:.25 }, { transform:'translateY(0) scale(1.08) rotate(2deg)', offset:.5 }, { transform:'translateY(4px) scale(1.12) rotate(-2deg)', offset:.75 }, { transform:'translateY(0) scale(1.15)' }], { duration:2200, easing:'ease-in-out' });
+  for (let k = 0; k < 7; k++) setTimeout(() => { const f = document.createElement('i'); f.style.cssText = `left:${10 + rnd(80)}vw;top:${5 + rnd(30)}vh;width:60px;height:60px;border-radius:50%;background:radial-gradient(#fff,rgba(255,255,255,0))`; fx.appendChild(f);
+    const a = anim(f, [{ opacity:1, transform:'scale(.3)' }, { opacity:0, transform:'scale(1.6)' }], { duration:350 }); if (a) a.onfinish = () => f.remove(); else setTimeout(() => f.remove(), 400); }, 200 + k * 280);
+  Snd.cheer(); setTimeout(() => Snd.fanfare(), 700);
+  await sleep(2400);
+  if (!RG) return;
+  const lv = R.level[R_STAGES[st].id] || 2;
+  R.designs.push({ s:st, d:Date.now(), coll:R.equip.coll, hair:R.equip.hair, hairColor:R.equip.hairColor, f:RG.gems });
+  rGems(3);
+  let lvMsg = '';
+  if (R.settings.diff === 'auto'){
+    if (RG.gems >= 9 && lv < 3){ R.level[R_STAGES[st].id] = lv + 1; lvMsg = `🚀 طلعتي مستوى «${R_LEVEL_NAMES[lv + 1]}»!`; }
+    else if (RG.gems <= 4 && lv > 1) R.level[R_STAGES[st].id] = lv - 1;
+  }
+  rSave();
+  $('#rEndPic').innerHTML = girlStandalone({ coll:R.equip.coll });
+  $('#rEndTitle').textContent = `تصميم ${R_STAGES[st].name} خلص! 👗`;
+  $('#rEndTxt').innerHTML = `التصميم اتحفظ في ألبومك 📒<br>💎 +${fmt(RG.gems + 3)}` + (lvMsg ? `<br><b>${lvMsg}</b>` : '');
+  $('#rEnd').classList.add('show'); confetti(50);
+  RG.busy = false;
+}
+$('#rEndAgain').addEventListener('click', () => { Snd.tap(); $('#rEnd').classList.remove('show'); rStart(RG ? RG.stage : 0); });
+$('#rEndHome').addEventListener('click', () => { Snd.tap(); $('#rEnd').classList.remove('show'); RG = null; show('rhome'); });
+
+/* ---------------- album & studio ---------------- */
+function renderRAlbum(){
+  const body = $('#rAlbumBody');
+  if (!R.designs.length){ body.innerHTML = `<div class="r-empty">لسه مفيش تصاميم هنا ✨<br>جاوبي ١٠ أسئلة في أي استوديو، والفستان اللي هتصمميه هيتحفظ هنا.</div>`; return; }
+  let h = `<div class="r-counts">${R_STAGES.map((st, i) => `<span>${st.ic} ${st.short}: <b>${fmt(rDesignsFor(i))}</b></span>`).join('')}</div><div class="r-album">`;
+  R.designs.slice().reverse().slice(0, 60).forEach(d => {
+    const dt = new Date(d.d);
+    h += `<div class="r-look"><svg viewBox="4 0 92 184">${girlSVG({ pieces:'all', coll:d.coll, hair:d.hair, hairColor:d.hairColor })}</svg><b>${R_STAGES[d.s].short}</b><small>${fmt(dt.getDate())}/${fmt(dt.getMonth() + 1)} · 💎${fmt(d.f)}</small></div>`;
+  });
+  body.innerHTML = h + '</div>';
+}
+function renderRLocker(){
+  $('#rlGems').textContent = fmt(R.gems);
+  $('#rLockerHero').innerHTML = girlStandalone();
+  const body = $('#rLockerBody'); body.innerHTML = '';
+  const section = (title, list, key, prev) => {
+    const hd = document.createElement('h3'); hd.textContent = title; body.appendChild(hd);
+    const grid = document.createElement('div'); grid.className = 'items';
+    list.forEach(it => {
+      const locked = R.gems < it.need, on = R.equip[key] === it.id, b = document.createElement('button');
+      b.className = 'item' + (on ? ' on' : '') + (locked ? ' locked' : '');
+      b.innerHTML = prev(it) + `<span>${it.name}</span>` + (locked ? `<span class="lock">🔒<small>💎 ${fmt(it.need)}</small></span>` : '');
+      b.addEventListener('click', () => { Snd.init(); if (locked){ Snd.tap(); return; } R.equip[key] = it.id; rSave(); Snd.sparkle(); renderRLocker(); });
+      grid.appendChild(b);
+    });
+    body.appendChild(grid);
+  };
+  section('👗 المجموعة', R_COLL, 'coll', it => `<svg viewBox="4 0 92 184">${girlSVG({ pieces:'all', coll:it.id })}</svg>`);
+  section('💇‍♀️ التسريحة', R_HAIR, 'hair', it => `<svg viewBox="20 0 60 70" style="height:70px">${girlSVG({ pieces:new Set(), hair:it.id })}</svg>`);
+  section('🎨 لون الشعر', R_HAIRC, 'hairColor', it => `<span class="swatch" style="background:${it.c};width:56px;height:56px"></span>`);
+}
+
+/* ---------------- parent page for Roaa ---------------- */
+function renderParentRoaa(body){
+  const mins = Math.floor(R.time.sec / 60), lt = R.settings.limit ? R.settings.limit + Math.round(R.time.bonus / 60) : 0;
+  let h = `<div class="card"><h3>📊 ملخص رؤى</h3><div class="kv"><div>👗 التصاميم<br><b>${R.designs.length}</b></div><div>💎 الجواهر<br><b>${R.gems}</b></div><div>⏱️ لعب النهارده<br><b>${mins}</b> دقيقة${lt ? ` من ${lt}` : ''}</div></div></div>`;
+  h += `<div class="card"><h3>✅ نسبة الإجابة الصح من أول مرة</h3>`;
+  R_STAGES.forEach((st, i) => { const s = R.stats[st.id], pc = s && s.q ? Math.round(s.f / s.q * 100) : null;
+    h += `<div class="stat"><span class="nm">${st.short} (${rDesignsFor(i)} تصميم)</span><span class="bar"><b style="width:${pc || 0}%"></b></span><span class="pc">${pc === null ? '—' : pc + '% (' + s.q + ')'}</span></div>`; });
+  h += `</div>`;
+  const ms = Object.entries(R.mistakes).sort((a, b) => b[1].n - a[1].n).slice(0, 18);
+  h += `<div class="card"><h3>⚠️ الحاجات اللي بتغلط فيها كتير</h3>` + (!ms.length ? `<p class="note">لسه مفيش أخطاء متسجلة 👏</p>` :
+    R_STAGES.map(st => { const l = ms.filter(m => m[1].s === st.id); return l.length ? `<p style="margin:8px 0 4px;font-weight:700">${st.short}:</p><div class="mist">${l.map(m => `<span><bdi>${esc(m[0])}</bdi> — ${m[1].n} مرة</span>`).join('')}</div>` : ''; }).join('')) + `</div>`;
+  const dsel = [['auto', 'تلقائي (بيعلى وينزل مع مستواها)'], [1, 'مراجعة خامسة'], [2, 'سادسة'], [3, 'سادسة متقدم']].map(([v, t]) => `<option value="${v}" ${String(R.settings.diff) === String(v) ? 'selected' : ''}>${t}</option>`).join('');
+  h += `<div class="card"><h3>🎯 مستوى الأسئلة</h3><div class="row" style="justify-content:flex-start"><label for="rDiffSel">المستوى:</label><select id="rDiffSel">${dsel}</select></div>
+    ${R_STAGES.map((st, i) => `<div class="stat"><span class="nm">${st.short}</span><span>${'💎'.repeat(rLevel(i))} ${R_LEVEL_NAMES[rLevel(i)]}</span></div>`).join('')}
+    <p class="note">في "تلقائي": ٩ من ١٠ صح من أول مرة = مستوى أعلى، و٤ أو أقل = مستوى أقل.</p></div>`;
+  const lim = [0, 15, 20, 30, 45, 60, 90].map(v => `<option value="${v}" ${R.settings.limit === v ? 'selected' : ''}>${v ? v + ' دقيقة' : 'من غير حد'}</option>`).join('');
+  h += `<div class="card"><h3>⏱️ وقت اللعب</h3><div class="row" style="justify-content:flex-start"><label for="rLimitSel">الحد اليومي:</label><select id="rLimitSel">${lim}</select></div>
+    <div class="row" style="justify-content:flex-start;margin-top:10px"><button class="btn small" id="rAddTime">زوّد ١٠ دقايق النهارده</button><button class="btn small gray" id="rResetTime">صفّر عداد النهارده</button></div></div>`;
+  h += `<div class="card"><h3>⚙️ إعدادات رؤى</h3><label><input type="checkbox" id="rVoiceChk" ${R.settings.voice ? 'checked' : ''}> قراءة كل سؤال بصوت عالي تلقائيًا</label>
+    <p class="note">لو مقفولة، تقدر رؤى تسمع أي سؤال بزرار 🔊. شكل الأرقام والمؤثرات الصوتية مشتركين مع لعبة يامن.</p></div>`;
+  h += `<div class="card"><h3>🗑️ البداية من الأول (رؤى بس)</h3><p class="note">بيمسح تصاميم وجواهر وإحصائيات رؤى بس. تقدم يامن مش بيتأثر.</p><button class="btn small" id="rResetAll" style="background:#b71c1c">امسح تقدم رؤى</button></div>`;
+  body.innerHTML = h;
+  $('#rDiffSel').addEventListener('change', e => { const v = e.target.value; R.settings.diff = v === 'auto' ? 'auto' : +v; rSave(); renderParent(); });
+  $('#rLimitSel').addEventListener('change', e => { R.settings.limit = +e.target.value; rSave(); renderParent(); });
+  $('#rVoiceChk').addEventListener('change', e => { R.settings.voice = e.target.checked; rSave(); });
+  $('#rAddTime').addEventListener('click', () => { R.time.bonus += 600; rSave(); hideRest(); renderParent(); });
+  $('#rResetTime').addEventListener('click', () => { R.time.sec = 0; R.time.bonus = 0; rSave(); hideRest(); renderParent(); });
+  let armed = 0;
+  $('#rResetAll').addEventListener('click', e => {
+    if (Date.now() - armed > 6000){ armed = Date.now(); e.currentTarget.textContent = 'متأكد؟ اضغط تاني عشان تمسح تقدم رؤى'; return; }
+    const keep = R.settings, t = R.time; R = RDEFAULT(); R.settings = keep; R.time = t; rSave(); renderParent();
+  });
+}
+
+$('#introRoaa').innerHTML = girlStandalone();
+$('#startRoaa').addEventListener('click', () => { Snd.init(); Snd.sparkle(); show('rhome'); rSay('أهلاً يا رؤى! يلا نصمم', true); });
 
 /* optional offline support: works when sw.js is uploaded next to this file (Netlify) */
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
@@ -1762,6 +2517,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 }
 
 /* test hook (read-only access for automated checks) */
+window.__RQ = { RGEN, R_STAGES, rMakeRound, rLevel, state: () => R, game: () => RG, AR_SYN, AR_ANT, AR_PL, SCI, SOC };
 window.__YC = { levelFor, LEVEL_NAMES, game: () => G, scene: SC, GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
 })();
 </script>
