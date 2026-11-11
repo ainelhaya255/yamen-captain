@@ -1204,8 +1204,10 @@ function renderParent(){
   $('#testVoice').addEventListener('click', () => { Snd.init(); Speech.pickVoices(); Speech.say('أهلاً يا يامن! جاوب صح وشوط جون. واحد، اتنين، تلاتة'); setTimeout(renderParent, 800); });
   $('#addTime').addEventListener('click', () => { S.time.bonus += 600; save(); hideRest(); renderParent(); });
   $('#resetTime').addEventListener('click', () => { S.time.sec = 0; S.time.bonus = 0; save(); hideRest(); renderParent(); });
-  $('#resetAll').addEventListener('click', () => {
-    if (!confirm('متأكد إنك عايز تمسح كل تقدم يامن؟')) return;
+  let resetArmed = 0;
+  $('#resetAll').addEventListener('click', e => {
+    // two taps instead of confirm(): some in-app browsers never show dialogs
+    if (Date.now() - resetArmed > 6000){ resetArmed = Date.now(); e.currentTarget.textContent = 'متأكد؟ اضغط تاني عشان تمسح كل حاجة'; return; }
     const keep = S.settings, t = S.time; S = DEFAULT(); S.settings = keep; S.time = t; save(); applyJersey(); renderParent();
   });
 }
