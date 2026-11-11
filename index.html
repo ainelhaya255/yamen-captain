@@ -203,6 +203,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
   <div id="introHero"></div>
   <div class="sub">جاوب صح… وشوط جون! 🥅</div>
   <button id="startBtn" class="btn">يلا نلعب ⚽</button>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٢ · ٥ ألعاب: جزاء · حارس · تمريرة · مراوغة · تنطيط</div>
 </section>
 
 <!-- ============ HOME ============ -->
@@ -1432,7 +1433,7 @@ function renderParent(){
       voiceOk ? `<p class="note">الصوت العربي المستخدم: ${esc(Speech.ar.name)} (${esc(Speech.ar.lang)})</p>` :
       `<p class="warn">مش لاقي صوت عربي متسطب على الجهاز. على أندرويد: الإعدادات ← اللغة والإدخال ← تحويل النص إلى كلام ← Google ← ثبّت "العربية". اللعبة هتحاول تقرا بالعربي برضه.</p>`}
   </div>`;
-  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
+  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">الإصدار ٢ (٥ أنواع لعب)</p><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
     <button class="btn small" id="resetAll" style="background:#b71c1c">امسح التقدم وابدأ من الأول</button></div>`;
   body.innerHTML = html;
   $('#limitSel').addEventListener('change', e => { S.settings.limit = +e.target.value; save(); renderParent(); });
@@ -1476,7 +1477,14 @@ applyJersey();
 
 /* optional offline support: works when sw.js is uploaded next to this file (Netlify) */
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
-  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache:'none' }).then(r => r.update()).catch(() => {});
+  });
+  // when a new version takes over, reload once so it shows immediately (only before play starts)
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloaded || current === 'play') return; reloaded = true; location.reload();
+  });
 }
 
 /* test hook (read-only access for automated checks) */
