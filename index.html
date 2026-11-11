@@ -123,6 +123,14 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
 .eq{font-size:clamp(30px,7vw,44px);font-weight:900;direction:rtl}
 .numline{display:flex;gap:10px;direction:rtl}
 .numline span{min-width:clamp(70px,18vw,104px);height:clamp(70px,18vw,104px);border:4px solid #1565c0;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:clamp(40px,10vw,64px);font-weight:900}
+.numline.seq span{min-width:clamp(52px,13vw,84px);height:clamp(52px,13vw,84px);font-size:clamp(28px,7vw,46px)}
+.word-opt{font-size:clamp(26px,7.5vw,46px);line-height:1.2}
+.pat{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;direction:rtl}
+.pat svg{width:clamp(40px,10vw,64px);height:clamp(40px,10vw,64px)}
+.pat .pq{width:clamp(40px,10vw,64px);height:clamp(40px,10vw,64px);border:3px dashed #e53935;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#e53935}
+.shp{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:min(92vw,420px)}
+.shp svg{width:clamp(36px,9vw,54px);height:clamp(36px,9vw,54px)}
+.stage-card .lvl{font-size:15px;background:rgba(0,0,0,.22);border-radius:10px;padding:1px 10px}
 .numline span.q{border-style:dashed;color:#e53935;border-color:#e53935}
 
 /* ---------- player animation helpers ---------- */
@@ -203,7 +211,7 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-
   <div id="introHero"></div>
   <div class="sub">جاوب صح… وشوط جون! 🥅</div>
   <button id="startBtn" class="btn">يلا نلعب ⚽</button>
-  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٢ · ٥ ألعاب: جزاء · حارس · تمريرة · مراوغة · تنطيط</div>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٣ · ٥ ألعاب · ٣ مستويات</div>
 </section>
 
 <!-- ============ HOME ============ -->
@@ -321,7 +329,8 @@ const DEFAULT = () => ({
   stats: {},                         // subject -> {q, f}
   mistakes: {},                      // label -> {n, s}
   equip: { jersey: 'red', ball: 'classic', celeb: 'jump' },
-  settings: { limit: 20, digits: 'ar', sound: true, voice: true },
+  settings: { limit: 20, digits: 'ar', sound: true, voice: true, diff: 'auto' },
+  level: { ar:2, en:2, num:2, math:2, shape:2 },
   time: { date: todayKey(), sec: 0, bonus: 0 }
 });
 let S;
@@ -333,6 +342,7 @@ function load(){
   S.equip = Object.assign(d.equip, S.equip || {});
   S.time = Object.assign(d.time, S.time || {});
   S.stats = S.stats || {}; S.mistakes = S.mistakes || {}; S.trophies = S.trophies || [];
+  S.level = Object.assign(d.level, S.level || {});
 }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 load();
@@ -657,17 +667,49 @@ const NUM = n => `<span>${fmt(n)}</span>`;
 function ballsGrid(n){ let h = '<div class="balls">'; for (let i = 0; i < n; i++){ h += ballSVG(); } return h + '</div>'; }
 function ballGroup(n, gone){ let h = '<div class="grp">'; for (let i = 0; i < n; i++){ h += `<span class="${i >= n - (gone||0) ? 'gone' : ''}">${ballSVG()}</span>`; } return h + '</div>'; }
 
+/* ---------- helpers for harder levels ---------- */
+const AR_FAMILIES = [['ب','ت','ث'],['ج','ح','خ'],['د','ذ'],['ر','ز'],['س','ش'],['ص','ض'],['ط','ظ'],['ع','غ'],['ف','ق']];
+/* two wrong letters; from level 2 the first one is a look-alike (ب/ت/ث …) when there is one */
+function arWrong(L, lvl){
+  const fam = AR_FAMILIES.find(f => f.includes(L.ch)), out = [];
+  if (lvl >= 2 && fam) shuffle(fam.filter(c => c !== L.ch)).slice(0, lvl >= 3 ? 2 : 1).forEach(c => out.push(AR.find(a => a.ch === c)));
+  sample(AR, 2, x => x.ch === L.ch || out.includes(x)).forEach(x => { if (out.length < 2) out.push(x); });
+  return out;
+}
+const HARAKAT = [{ m:'َ', n:'بالفتحة', v:'ا' }, { m:'ُ', n:'بالضمة', v:'و' }, { m:'ِ', n:'بالكسرة', v:'ي' }];
+const SIMPLE_LETTERS = ['ب','ت','د','ر','س','ف','ك','ل','م','ن','ج','ح'];
+const EN_MISSING = [
+  { w:'Ball', i:1, d:['o','t'] }, { w:'Cat', i:1, d:['e','i'] }, { w:'Dog', i:1, d:['a','e'] }, { w:'Sun', i:1, d:['a','e'] },
+  { w:'Fish', i:1, d:['a','o'] }, { w:'Bus', i:1, d:['a','e'] }, { w:'Egg', i:0, d:['A','O'] }, { w:'Lion', i:1, d:['a','u'] },
+  { w:'Moon', i:1, d:['a','e'] }, { w:'Tree', i:2, d:['a','i'] }, { w:'Goal', i:1, d:['a','e'] }
+];
+const CONFUSE_LOWER = [['b','d','p','q'], ['m','n','u','w'], ['i','j','l','t'], ['c','e','o','a'], ['h','n','r'], ['f','t','k']];
+const COLOR_MIX = [{ a:'red', b:'yellow', r:'orange' }, { a:'blue', b:'yellow', r:'green' }, { a:'red', b:'blue', r:'purple' }];
+const SIDES = { triangle:3, square:4, rect:4 };
+const reverseNum = n => +String(n).split('').reverse().join('');
+/* two wrong numbers near ans; for 2-digit answers prefer the classic slips: swapped digits and ±10 */
+function nearNums2(ans, min, max){
+  const c = shuffle([reverseNum(ans), ans + 10, ans - 10, ans + 1, ans - 1].filter(x => x >= min && x <= max && x !== ans && x >= 0));
+  const out = [...new Set(c)].slice(0, 2);
+  nearNums(ans, min, max).forEach(x => { if (out.length < 2 && !out.includes(x)) out.push(x); });
+  return out;
+}
+const numOpts = (ans, wrong) => [opt(NUM(ans), 1, ans), ...wrong.map(x => opt(NUM(x), 0, x))];
+const wordHTML = (w, en) => `<span class="word-opt${en ? ' en-letter' : ''}">${w}</span>`;
+const MAXN = [0, 10, 20, 99];    // biggest number per level (numbers stadium)
+const MATHMAX = [0, 10, 20, 20]; // biggest sum per level (maths stadium)
+
 const GEN = {
   /* ---- Arabic letters ---- */
-  arHear(){
-    const L = pick(AR), o = sample(AR, 2, x => x.ch === L.ch);
+  arHear(lvl){
+    const L = pick(AR), o = arWrong(L, lvl || 1);
     return { sub:'ar', key:'arH' + L.ch, label:'حرف ' + L.ch,
       text:'👂 اسمع… فين الحرف ده؟', say:`فين حرف ${L.name}؟`, visual:'',
       options:[opt(letterHTML(L.ch), 1, L.ch), ...o.map(x => opt(letterHTML(x.ch), 0, x.ch))],
       check:{ type:'arHear', ans:L.ch } };
   },
-  arWord(){
-    const L = pick(AR), o = sample(AR, 2, x => x.ch === L.ch);
+  arWord(lvl){
+    const L = pick(AR), o = arWrong(L, lvl || 1);
     return { sub:'ar', key:'arW' + L.ch, label:`${L.ch} (${L.word})`,
       text:'الصورة دي بتبدأ بأنهي حرف؟', say:`${L.word}… بتبدأ بأنهي حرف؟`,
       visual:`<span class="vis-xl">${L.e}</span>`,
@@ -675,8 +717,8 @@ const GEN = {
       reveal:`<b>${L.word[0]}</b>${L.word.slice(1)} ${L.e}`, after:`${L.word} بتبدأ بحرف ${L.name}`,
       check:{ type:'arWord', word:L.word, ans:L.ch } };
   },
-  arPic(){
-    const L = pick(AR), o = sample(AR, 2, x => x.ch === L.ch);
+  arPic(lvl){
+    const L = pick(AR), o = arWrong(L, lvl || 1);
     return { sub:'ar', key:'arP' + L.ch, label:`صورة تبدأ بـ ${L.ch}`,
       text:`فين الصورة اللي بتبدأ بالحرف ده؟`, say:`فين الصورة اللي بتبدأ بحرف ${L.name}؟`,
       visual:`<span class="vis-xl" style="color:#c40000">${L.ch}</span>`,
@@ -684,16 +726,53 @@ const GEN = {
       reveal:`<b>${L.word[0]}</b>${L.word.slice(1)} ${L.e}`, after:`${L.word} بتبدأ بحرف ${L.name}`,
       check:{ type:'arPic', letter:L.ch } };
   },
-  /* ---- English letters ---- */
-  enHear(){
-    const L = pick(EN_LETTERS), o = sample(EN_LETTERS, 2, x => x === L);
-    return { sub:'en', key:'enH' + L, label:'Letter ' + L,
-      text:'👂 اسمع… فين الحرف ده؟', say:[{ t:'فين حرف' }, { t:L, en:1 }],
-      visual:'', options:[opt(enLetterHTML(L), 1, L), ...o.map(x => opt(enLetterHTML(x), 0, x))],
-      check:{ type:'enHear', ans:L } };
+  /* short vowels: بَ بُ بِ */
+  arHaraka(){
+    const ch = pick(SIMPLE_LETTERS), L = AR.find(a => a.ch === ch), H = pick(HARAKAT);
+    return { sub:'ar', key:'arK' + ch + H.m, label:`${ch}${H.m} (${H.n.replace('بال', '')})`,
+      text:'👂 اسمع… فين الصوت ده؟', say:`فين ${L.name} ${H.n}… ${ch}${H.m}`, visual:'',
+      options: HARAKAT.map(x => opt(letterHTML(ch + x.m), x === H, ch + x.m)), check:{ type:'haraka', ch, h:H.m } };
   },
-  enCase(){
-    const L = pick(EN_LETTERS), o = sample(EN_LETTERS, 2, x => x === L || (L === 'I' && x === 'L') || (L === 'L' && x === 'I'));
+  /* long vowels: بَا بُو بِي */
+  arMadd(){
+    const ch = pick(SIMPLE_LETTERS), H = pick(HARAKAT), syl = x => ch + x.m + x.v;
+    return { sub:'ar', key:'arM' + ch + H.v, label:`مد ${syl(H)}`,
+      text:'👂 اسمع… فين الصوت ده؟', say:`فين… ${syl(H)}؟`, visual:'',
+      options: HARAKAT.map(x => opt(letterHTML(syl(x)), x === H, syl(x))), check:{ type:'madd', ch, h:H.m, v:H.v } };
+  },
+  /* first letter missing from the written word */
+  arMissing(lvl){
+    const L = pick(AR), o = arWrong(L, Math.max(2, lvl || 2));
+    return { sub:'ar', key:'arX' + L.ch, label:`؟${L.word.slice(1)} (${L.ch})`,
+      text:'إيه الحرف الناقص في أول الكلمة؟', say:`${L.word}… إيه الحرف الناقص في أولها؟`,
+      visual:`<span class="vis-xl">${L.e}</span><span class="vis-word" style="direction:rtl;color:#222"><span style="color:#e53935">؟</span>${L.word.slice(1)}</span>`,
+      options:[opt(letterHTML(L.ch), 1, L.ch), ...o.map(x => opt(letterHTML(x.ch), 0, x.ch))],
+      reveal:`<b>${L.word[0]}</b>${L.word.slice(1)} ${L.e}`, after:`${L.word} بتبدأ بحرف ${L.name}`,
+      check:{ type:'arMissing', word:L.word } };
+  },
+  /* real reading: hear a word, pick it among 3 written words */
+  arRead(){
+    const L = pick(AR), o = sample(AR, 2, x => x.ch === L.ch);
+    return { sub:'ar', key:'arR' + L.word, label:`قراءة: ${L.word}`,
+      text:'👂 اسمع واقرا… فين الكلمة دي؟', say:`فين كلمة… ${L.word}؟`, visual:'',
+      options:[opt(wordHTML(L.word), 1, L.word), ...o.map(x => opt(wordHTML(x.word), 0, x.word))],
+      reveal:`${L.word} ${L.e}`, check:{ type:'arRead', word:L.word } };
+  },
+  /* ---- English letters ---- */
+  enHear(lvl){
+    const lower = (lvl || 1) >= 3 && Math.random() < .5;
+    let L = pick(EN_LETTERS), o = sample(EN_LETTERS, 2, x => x === L);
+    if (lower){ const g = pick(CONFUSE_LOWER); L = pick(g).toUpperCase(); o = sample(g, 2, x => x === L.toLowerCase()).map(x => x.toUpperCase()); }
+    const show = x => lower ? x.toLowerCase() : x;
+    return { sub:'en', key:'enH' + show(L), label:'Letter ' + show(L),
+      text:'👂 اسمع… فين الحرف ده؟', say:[{ t:'فين حرف' }, { t:L, en:1 }],
+      visual:'', options:[opt(enLetterHTML(show(L)), 1, show(L)), ...o.map(x => opt(enLetterHTML(show(x)), 0, show(x)))],
+      check:{ type:'enHear', ans:show(L) } };
+  },
+  enCase(lvl){
+    let L, o;
+    if ((lvl || 1) >= 2){ const g = pick(CONFUSE_LOWER); const lo = pick(g); L = lo.toUpperCase(); o = sample(g, 2, x => x === lo).map(x => x.toUpperCase()); }
+    else { L = pick(EN_LETTERS); o = sample(EN_LETTERS, 2, x => x === L || (L === 'I' && x === 'L') || (L === 'L' && x === 'I')); }
     return { sub:'en', key:'enC' + L, label:`${L} ${L.toLowerCase()}`,
       text:'فين الحرف الصغير بتاع الحرف ده؟', say:[{ t:'فين الحرف الصغير بتاع' }, { t:L, en:1 }],
       visual:`<span class="vis-xl en-letter" style="color:#1565c0">${L}</span>`,
@@ -717,50 +796,164 @@ const GEN = {
       reveal:`<span class="ltr"><b>${first}</b>${W.w.slice(1)}</span> ${W.e}`, after:[{ t:W.w, en:1 }, { t:'بتبدأ بحرف' }, { t:first, en:1 }],
       check:{ type:'enStart', word:W.w } };
   },
-  /* ---- Numbers 1..20 ---- */
-  numCount(){
-    const n = Math.random() < .6 ? randInt(1, 10) : randInt(11, 20);
-    const o = nearNums(n, 1, 20);
+  /* alphabet order: letter after / before */
+  enNext(lvl){
+    const after = (lvl || 2) < 3 || Math.random() < .5;
+    const i = after ? randInt(0, 24) : randInt(1, 25), L = EN_LETTERS[i], ans = EN_LETTERS[after ? i + 1 : i - 1];
+    const o = sample(EN_LETTERS.slice(Math.max(0, i - 3), i + 4), 2, x => x === ans || x === L);
+    const line = after ? `<div class="numline ltr" style="direction:ltr"><span class="en-letter">${L}</span><span class="q">?</span></div>` : `<div class="numline ltr" style="direction:ltr"><span class="q">?</span><span class="en-letter">${L}</span></div>`;
+    return { sub:'en', key:'enN' + (after ? 'A' : 'B') + L, label: after ? `بعد ${L}` : `قبل ${L}`,
+      text: after ? 'إيه الحرف اللي <b>بعد</b> ده؟' : 'إيه الحرف اللي <b>قبل</b> ده؟',
+      say:[{ t: after ? 'إيه الحرف اللي بعد' : 'إيه الحرف اللي قبل' }, { t:L, en:1 }], visual:line,
+      options:[opt(enLetterHTML(ans), 1, ans), ...o.map(x => opt(enLetterHTML(x), 0, x))], check:{ type:'enNext', L, after } };
+  },
+  /* missing letter inside a word: B_ll */
+  enMissing(){
+    const M = pick(EN_MISSING), W = EN_WORDS.find(x => x.w === M.w), ans = M.w[M.i];
+    const shown = M.w.slice(0, M.i) + '_' + M.w.slice(M.i + 1);
+    return { sub:'en', key:'enM' + M.w, label:`${shown} (${ans})`,
+      text:'إيه الحرف الناقص؟', say:[{ t:M.w, en:1 }, { t:'ناقصها أنهي حرف؟' }],
+      visual:`<span class="vis-xl">${W.e}</span><span class="vis-word">${shown}</span>`,
+      options:[opt(enLetterHTML(ans), 1, ans), ...M.d.map(x => opt(enLetterHTML(x), 0, x))],
+      reveal:`<span class="ltr">${M.w.slice(0, M.i)}<b>${ans}</b>${M.w.slice(M.i + 1)}</span> ${W.e}`, check:{ type:'enMissing', word:M.w, i:M.i } };
+  },
+  /* hear a word, read it among 3 written words (same first letter when possible) */
+  enRead(){
+    const W = pick(EN_WORDS);
+    let o = sample(EN_WORDS, 2, x => x.w === W.w || x.w[0] !== W.w[0]);
+    if (o.length < 2) o = o.concat(sample(EN_WORDS, 2 - o.length, x => x.w === W.w || o.includes(x)));
+    return { sub:'en', key:'enR' + W.w, label:`Read ${W.w}`,
+      text:'👂 اسمع واقرا… فين الكلمة دي؟', say:[{ t:'فين كلمة' }, { t:W.w, en:1 }],
+      visual:'', options:[opt(wordHTML(W.w, 1), 1, W.w), ...o.map(x => opt(wordHTML(x.w, 1), 0, x.w))],
+      reveal:`<span class="ltr">${W.w}</span> ${W.e}`, check:{ type:'enRead', word:W.w } };
+  },
+  /* last letter of a word */
+  enLast(){
+    const W = pick(EN_WORDS), last = W.w.slice(-1), o = sample(EN_LETTERS.map(x => x.toLowerCase()), 2, x => x === last);
+    return { sub:'en', key:'enL' + W.w, label:`${W.w} (آخر حرف ${last})`,
+      text:'الكلمة دي بتخلص بأنهي حرف؟', say:[{ t:W.w, en:1 }, { t:'بتخلص بأنهي حرف؟' }],
+      visual:`<span class="vis-xl">${W.e}</span>`,
+      options:[opt(enLetterHTML(last), 1, last), ...o.map(x => opt(enLetterHTML(x), 0, x))],
+      reveal:`<span class="ltr">${W.w.slice(0, -1)}<b>${last}</b></span> ${W.e}`, check:{ type:'enLast', word:W.w } };
+  },
+  /* ---- Numbers ---- */
+  numCount(lvl){
+    const mx = Math.min(20, MAXN[lvl || 2]);
+    const n = mx <= 10 ? randInt(1, 10) : (Math.random() < .35 ? randInt(5, 10) : randInt(11, mx));
     return { sub:'num', key:'nC' + n, label:`عدّ ${fmt(n)}`,
       text:'عدّ الكور… كام كورة؟', say:'عدّ الكور… كام كورة؟', visual:ballsGrid(n),
-      options:[opt(NUM(n), 1, n), ...o.map(x => opt(NUM(x), 0, x))], check:{ type:'count', n } };
+      options:numOpts(n, nearNums(n, 1, mx)), check:{ type:'count', n } };
   },
-  numHear(){
-    const n = randInt(1, 20), o = nearNums(n, 1, 20);
+  numHear(lvl){
+    const mx = MAXN[lvl || 2], n = mx > 20 ? randInt(12, mx) : randInt(1, mx);
     return { sub:'num', key:'nH' + n, label:`رقم ${fmt(n)}`,
       text:'👂 اسمع… فين الرقم ده؟', say:`فين رقم ${n}؟`, visual:'',
-      options:[opt(NUM(n), 1, n), ...o.map(x => opt(NUM(x), 0, x))], check:{ type:'hear', n } };
+      options:numOpts(n, mx > 20 ? nearNums2(n, 1, mx) : nearNums(n, 1, mx)), check:{ type:'hear', n } };
   },
-  numCompare(){
-    const big = Math.random() < .5;
-    let set = new Set(); while (set.size < 3) set.add(randInt(1, 20));
+  numCompare(lvl){
+    const big = Math.random() < .5, mx = MAXN[lvl || 2];
+    let set = new Set();
+    if (mx > 20){ const a = randInt(12, 98); set.add(a); const r = reverseNum(a); if (r !== a && r >= 10) set.add(r); while (set.size < 3) set.add(Math.max(10, Math.min(99, a + randInt(-9, 9)))); }
+    else while (set.size < 3) set.add(randInt(1, mx));
     const arr = [...set], ans = big ? Math.max(...arr) : Math.min(...arr);
     return { sub:'num', key:'nK' + (big ? 'B' : 'S') + arr.slice().sort((a,b)=>a-b).join(','), label: big ? 'الرقم الأكبر' : 'الرقم الأصغر',
       text: big ? 'أنهي رقم <b>أكبر</b>؟ 🐘' : 'أنهي رقم <b>أصغر</b>؟ 🐭', say: big ? 'أنهي رقم أكبر؟' : 'أنهي رقم أصغر؟',
       visual:'', options: arr.map(x => opt(NUM(x), x === ans, x)), check:{ type:big ? 'max' : 'min', arr } };
   },
-  numNext(){
-    const after = Math.random() < .6;
-    const n = after ? randInt(1, 19) : randInt(2, 20), ans = after ? n + 1 : n - 1, o = nearNums(ans, 1, 20);
+  numNext(lvl){
+    const after = Math.random() < .55, mx = MAXN[lvl || 2], lo = mx > 20 ? 10 : 1;
+    const n = after ? randInt(lo, mx - 1) : randInt(lo + 1, mx), ans = after ? n + 1 : n - 1;
     const line = after ? `<div class="numline"><span>${fmt(n)}</span><span class="q">؟</span></div>` : `<div class="numline"><span class="q">؟</span><span>${fmt(n)}</span></div>`;
     return { sub:'num', key:'nN' + (after ? 'A' : 'B') + n, label: after ? `بعد ${fmt(n)}` : `قبل ${fmt(n)}`,
       text: after ? `إيه الرقم اللي <b>بعد</b> ${fmt(n)}؟` : `إيه الرقم اللي <b>قبل</b> ${fmt(n)}؟`,
       say: after ? `إيه الرقم اللي بعد ${n}؟` : `إيه الرقم اللي قبل ${n}؟`, visual:line,
-      options:[opt(NUM(ans), 1, ans), ...o.map(x => opt(NUM(x), 0, x))], check:{ type: after ? 'next' : 'prev', n } };
+      options:numOpts(ans, mx > 20 ? nearNums2(ans, 1, mx) : nearNums(ans, 1, mx)), check:{ type: after ? 'next' : 'prev', n } };
   },
-  /* ---- Math up to 10 ---- */
-  mathAdd(){
-    const a = randInt(1, 9), b = randInt(1, 10 - a), ans = a + b, o = nearNums(ans, 0, 10);
+  /* skip counting: ٢، ٤، ٦، ؟ */
+  numSeq(lvl){
+    const big = (lvl || 2) >= 3, step = big ? pick([2, 5, 10, 10]) : pick([1, 2, 2]);
+    const len = 4, maxStart = (big ? 99 : 20) - step * len, a = step >= 5 ? step * randInt(0, Math.floor(maxStart / step)) || step : randInt(1, Math.max(1, maxStart));
+    const miss = randInt(1, len), seq = [];
+    for (let k = 0; k <= len; k++) seq.push(a + step * k);
+    const ans = seq[miss], shown = seq.map((x, k) => k === miss ? '<span class="q">؟</span>' : `<span>${fmt(x)}</span>`).join('');
+    const o = shuffle([...new Set([ans + step, ans - step, ans + 1, ans - 1, ans + 10])].filter(x => x > 0 && x <= 100 && x !== ans && !seq.includes(x))).slice(0, 2);
+    return { sub:'num', key:'nS' + a + ',' + step + ',' + miss, label:`العدّ بالـ${fmt(step)}`,
+      text:'إيه الرقم الناقص؟', say:'بنعدّ… إيه الرقم الناقص؟', visual:`<div class="numline seq">${shown}</div>`,
+      options:numOpts(ans, o.length === 2 ? o : nearNums(ans, 1, 100)), check:{ type:'seq', a, step, miss } };
+  },
+  /* tens and ones: ٤٣ فيها كام عشرة؟ / ١٥ = ١٠ + ؟ */
+  numTens(lvl){
+    const big = (lvl || 2) >= 3, n = big ? randInt(21, 98) : randInt(11, 19);
+    const kind = big ? pick(['tens', 'ones', 'add']) : 'add', T = Math.floor(n / 10) * 10;
+    const ans = kind === 'tens' ? Math.floor(n / 10) : n % 10;
+    const text = kind === 'tens' ? `الرقم ${fmt(n)} فيه كام <b>عشرة</b>؟` : kind === 'ones' ? `الرقم ${fmt(n)} فيه كام <b>آحاد</b>؟` : `<span class="eq">${fmt(n)} = ${fmt(T)} + ؟</span>`;
+    const say = kind === 'tens' ? `الرقم ${n} فيه كام عشرة؟` : kind === 'ones' ? `الرقم ${n} فيه كام آحاد؟` : `${n} يساوي ${T} زائد كام؟`;
+    const wrong = kind === 'add' ? nearNums(ans, 0, 9) : shuffle([n % 10 === ans ? Math.floor(n / 10) : n % 10, ans + 1, ans - 1].filter((x, k, a) => x >= 0 && x <= 9 && x !== ans && a.indexOf(x) === k)).slice(0, 2);
+    return { sub:'num', key:'nT' + kind + n, label: kind === 'add' ? `${fmt(n)} = ${fmt(T)} + ؟` : `عشرات وآحاد ${fmt(n)}`,
+      text, say, visual:'', options:numOpts(ans, wrong.length === 2 ? wrong : nearNums(ans, 0, 9)), check:{ type:'tens', n, kind } };
+  },
+  /* ---- Maths ---- */
+  mathAdd(lvl){
+    const mx = MATHMAX[lvl || 2];
+    const a = randInt(mx > 10 ? 3 : 1, mx - 1), b = randInt(1, mx - a), ans = a + b;
     return { sub:'math', key:'mA' + a + '+' + b, label:`${fmt(a)} + ${fmt(b)}`,
       text:`<span class="eq">${fmt(a)} + ${fmt(b)} = ؟</span>`, say:`${a} كورة… زائد ${b} كورة… يساوي كام؟`,
-      visual:`${ballGroup(a)}<span class="op">+</span>${ballGroup(b)}`,
-      options:[opt(NUM(ans), 1, ans), ...o.map(x => opt(NUM(x), 0, x))], check:{ type:'add', a, b } };
+      visual: ans <= 20 ? `${ballGroup(a)}<span class="op">+</span>${ballGroup(b)}` : '',
+      options:numOpts(ans, nearNums(ans, 0, mx)), check:{ type:'add', a, b } };
   },
-  mathSub(){
-    const a = randInt(2, 10), b = randInt(1, a - 1), ans = a - b, o = nearNums(ans, 0, 10);
+  mathSub(lvl){
+    const mx = MATHMAX[lvl || 2];
+    const a = randInt(mx > 10 ? 8 : 2, mx), b = randInt(1, a - 1), ans = a - b;
     return { sub:'math', key:'mS' + a + '-' + b, label:`${fmt(a)} − ${fmt(b)}`,
       text:`<span class="eq">${fmt(a)} − ${fmt(b)} = ؟</span>`, say:`معانا ${a} كورة… شيلنا ${b}… فاضل كام؟`,
-      visual:ballGroup(a, b), options:[opt(NUM(ans), 1, ans), ...o.map(x => opt(NUM(x), 0, x))], check:{ type:'sub', a, b } };
+      visual:ballGroup(a, b), options:numOpts(ans, nearNums(ans, 0, mx)), check:{ type:'sub', a, b } };
+  },
+  /* missing number: ٣ + ؟ = ٨  /  ١٢ − ؟ = ٧ */
+  mathMissing(lvl){
+    const mx = MATHMAX[lvl || 2], plus = Math.random() < .6;
+    if (plus){
+      const c = randInt(4, mx), a = randInt(1, c - 1), ans = c - a;
+      return { sub:'math', key:'mM+' + a + '=' + c, label:`${fmt(a)} + ؟ = ${fmt(c)}`,
+        text:`<span class="eq">${fmt(a)} + <span style="color:#e53935">؟</span> = ${fmt(c)}</span>`, say:`${a} زائد كام… يساوي ${c}؟`,
+        visual: c <= 20 ? `${ballGroup(a)}<span class="op">+</span><span class="op" style="color:#e53935">؟</span>` : '',
+        options:numOpts(ans, nearNums(ans, 0, mx)), check:{ type:'missAdd', a, c } };
+    }
+    const a = randInt(5, mx), c = randInt(1, a - 1), ans = a - c;
+    return { sub:'math', key:'mM-' + a + '=' + c, label:`${fmt(a)} − ؟ = ${fmt(c)}`,
+      text:`<span class="eq">${fmt(a)} − <span style="color:#e53935">؟</span> = ${fmt(c)}</span>`, say:`${a} ناقص كام… يساوي ${c}؟`,
+      visual:'', options:numOpts(ans, nearNums(ans, 0, mx)), check:{ type:'missSub', a, c } };
+  },
+  /* three numbers: ٢ + ٥ + ٣ */
+  mathThree(){
+    const a = randInt(1, 6), b = randInt(1, 6), c = randInt(1, 18 - a - b > 6 ? 6 : 18 - a - b), ans = a + b + c;
+    return { sub:'math', key:'m3' + a + b + c, label:`${fmt(a)} + ${fmt(b)} + ${fmt(c)}`,
+      text:`<span class="eq">${fmt(a)} + ${fmt(b)} + ${fmt(c)} = ؟</span>`, say:`${a} زائد ${b} زائد ${c}… يساوي كام؟`,
+      visual:`${ballGroup(a)}<span class="op">+</span>${ballGroup(b)}<span class="op">+</span>${ballGroup(c)}`,
+      options:numOpts(ans, nearNums(ans, 0, 20)), check:{ type:'add3', a, b, c } };
+  },
+  /* tens: ٢٠ + ٣٠ */
+  mathTens(){
+    const plus = Math.random() < .6, a = 10 * randInt(plus ? 1 : 3, plus ? 8 : 9), b = 10 * randInt(1, plus ? 9 - a / 10 : a / 10 - 1), ans = plus ? a + b : a - b;
+    const o = shuffle([ans + 10, ans - 10, ans + 1, plus ? a + b / 10 : ans + 20].filter(x => x >= 0 && x !== ans)).slice(0, 2);
+    return { sub:'math', key:'mT' + a + (plus ? '+' : '-') + b, label:`${fmt(a)} ${plus ? '+' : '−'} ${fmt(b)}`,
+      text:`<span class="eq">${fmt(a)} ${plus ? '+' : '−'} ${fmt(b)} = ؟</span>`, say:`${a} ${plus ? 'زائد' : 'ناقص'} ${b}… يساوي كام؟`,
+      visual:'', options:numOpts(ans, o), check:{ type: plus ? 'add' : 'sub', a, b } };
+  },
+  /* short word problems, read aloud */
+  mathStory(){
+    const T = pick([
+      { op:'+', t:(a, b) => `يامن جاب ${a} جون في الماتش الأول، و${b} جون في التاني. جاب كام جون؟` },
+      { op:'+', t:(a, b) => `في الملعب ${a} لعيبة، ودخل ${b} لعيبة كمان. بقوا كام لعيب؟` },
+      { op:'+', t:(a, b) => `يامن معاه ${a} نجمة، وكسب ${b} نجوم كمان. بقى معاه كام نجمة؟` },
+      { op:'-', t:(a, b) => `مع يامن ${a} كورة، إدّى صاحبه ${b}. فضل معاه كام كورة؟` },
+      { op:'-', t:(a, b) => `في الدولاب ${a} فانلة، يامن لبس ${b}. فضل كام فانلة؟` }
+    ]);
+    let a, b;
+    if (T.op === '+'){ a = randInt(3, 12); b = randInt(2, 20 - a); } else { a = randInt(8, 20); b = randInt(2, a - 2); }
+    const ans = T.op === '+' ? a + b : a - b, txt = T.t(a, b);
+    return { sub:'math', key:'mW' + T.op + a + ',' + b, label:`مسألة: ${fmt(a)} ${T.op === '+' ? '+' : '−'} ${fmt(b)}`,
+      text:`<span style="font-size:.8em">${txt.replace(/\d+/g, d => fmt(d))}</span>`, say:txt, visual:'⚽',
+      options:numOpts(ans, nearNums(ans, 0, 20)), check:{ type: T.op === '+' ? 'add' : 'sub', a, b } };
   },
   /* ---- Shapes & colours ---- */
   shapeFind(){
@@ -796,22 +989,98 @@ const GEN = {
     return { sub:'shape', key:'sR' + R.o, label:`شكل ${R.o}`,
       text:`${R.o} شكلها زي إيه؟`, say:`${R.o}… شكلها زي إيه؟`, visual:`<span class="vis-xl">${R.e}</span>`,
       options:[opt(shapeSVG(R.s, col), 1, R.s), ...o.map(x => opt(shapeSVG(x, col), 0, x))], check:{ type:'real', o:R.o } };
+  },
+  /* sides / corners */
+  shapeSides(){
+    const k = pick(Object.keys(SIDES)), what = pick(['أضلاع', 'أركان']), ans = SIDES[k];
+    return { sub:'shape', key:'sS' + k + what, label:`${what} ${SHAPES[k].def}`,
+      text:`${SHAPES[k].def} ليه كام ${what === 'أضلاع' ? 'ضلع' : 'ركن'}؟`, say:`${SHAPES[k].def} ليه كام ${what === 'أضلاع' ? 'ضلع' : 'ركن'}؟`,
+      visual:shapeSVG(k, COLORS.blue.hex).replace('<svg', '<svg style="width:110px;height:110px"'),
+      options:numOpts(ans, ans === 3 ? [4, 5] : [3, 5]), check:{ type:'sides', k } };
+  },
+  /* which shape has 3 sides / no corners */
+  shapeBySides(){
+    const c = pick([{ t:'أنهي شكل ليه ٣ أضلاع؟', s:'تلات أضلاع', k:'triangle' }, { t:'أنهي شكل ملوش ولا ركن؟', s:'ملوش ولا ركن', k:'circle' }]);
+    const o = sample(Object.keys(SHAPES), 2, x => x === c.k), col = COLORS.green.hex;
+    return { sub:'shape', key:'sB' + c.k, label:c.t,
+      text:c.t, say: c.k === 'triangle' ? 'أنهي شكل ليه تلات أضلاع؟' : 'أنهي شكل ملوش ولا ركن؟', visual:'',
+      options:[opt(shapeSVG(c.k, col), 1, c.k), ...o.map(x => opt(shapeSVG(x, col), 0, x))], check:{ type:'bySides', k:c.k } };
+  },
+  /* mixing colours */
+  colorMix(){
+    const M = pick(COLOR_MIX), o = sample(Object.keys(COLORS), 2, x => x === M.r || x === M.a || x === M.b);
+    return { sub:'shape', key:'cM' + M.r, label:`${COLORS[M.a].m} + ${COLORS[M.b].m}`,
+      text:`لو خلطنا ال${COLORS[M.a].m} وال${COLORS[M.b].m}… يطلع لون إيه؟`, say:`لو خلطنا اللون ال${COLORS[M.a].m} واللون ال${COLORS[M.b].m}… يطلع لون إيه؟`,
+      visual:`${swatch(M.a)}<span class="op">+</span>${swatch(M.b)}<span class="op">=</span><span class="op" style="color:#e53935">؟</span>`,
+      options:[opt(swatch(M.r), 1, M.r), ...o.map(x => opt(swatch(x), 0, x))], check:{ type:'mix', a:M.a, b:M.b } };
+  },
+  /* patterns: 🔴🔵🔴🔵 ؟ */
+  shapePattern(lvl){
+    const sk = Object.keys(SHAPES), ck = Object.keys(COLORS);
+    const kinds = (lvl || 2) >= 3 ? ['AB', 'ABC', 'AAB', 'ABB'] : ['AB', 'AB', 'ABC'];
+    const kind = pick(kinds), n = new Set(kind).size;
+    const items = []; const ss = shuffle(sk), cc = shuffle(ck);
+    for (let k = 0; k < n; k++) items.push({ s: ss[k], c: cc[k] });
+    const unit = kind.split('').map(ch => items[ch.charCodeAt(0) - 65]);
+    const shownN = randInt(unit.length + 1, Math.min(7, unit.length * 2 + 1));
+    const seq = []; for (let k = 0; k < shownN; k++) seq.push(unit[k % unit.length]);
+    const ans = unit[shownN % unit.length], key = x => x.s + '|' + x.c;
+    const wrong = shuffle(items.filter(x => key(x) !== key(ans)).concat([{ s: ss[n], c: cc[n] }, { s: ans.s, c: cc[n] }])).filter((x, k, a) => a.findIndex(y => key(y) === key(x)) === k).slice(0, 2);
+    const draw = x => shapeSVG(x.s, COLORS[x.c].hex);
+    return { sub:'shape', key:'sP' + seq.map(key).join(','), label:`نمط ${kind}`,
+      text:'إيه اللي ييجي بعد كده؟', say:'بص على الترتيب… إيه اللي ييجي بعد كده؟',
+      visual:`<div class="pat">${seq.map(draw).join('')}<span class="pq">؟</span></div>`,
+      options:[opt(draw(ans), 1, key(ans)), ...wrong.map(x => opt(draw(x), 0, key(x)))], check:{ type:'pattern', unit: unit.map(key), shown: shownN } };
+  },
+  /* count one shape inside a picture */
+  shapeCount(){
+    const sk = Object.keys(SHAPES), target = pick(sk), ans = randInt(2, 6), total = randInt(ans + 3, ans + 6);
+    const items = []; for (let k = 0; k < ans; k++) items.push(target);
+    while (items.length < total) items.push(pick(sk.filter(x => x !== target)));
+    const pic = shuffle(items);
+    return { sub:'shape', key:'sK' + target + pic.join(''), label:`عدّ ${SHAPES[target].def}`,
+      text:`كام ${SHAPES[target].m} في الصورة؟`, say:`عدّ كويس… كام ${SHAPES[target].m} في الصورة؟`,
+      visual:`<div class="shp">${pic.map(k => shapeSVG(k, COLORS[pick(Object.keys(COLORS))].hex)).join('')}</div>`,
+      options:numOpts(ans, nearNums(ans, 1, 9)), check:{ type:'countShape', items:pic, target } };
   }
 };
 
+/* questions per stadium and level (1 = easy … 3 = hard) */
 const STAGES = [
-  { id:'ar',    name:'ملعب الحروف العربي',    short:'الحروف العربي',    ic:()=>'أ ب ت', gens:['arHear','arHear','arWord','arWord','arPic'] },
-  { id:'en',    name:'ملعب الحروف الإنجليزي',  short:'الحروف الإنجليزي', ic:()=>'<span class="ltr">A B C</span>', gens:['enHear','enHear','enCase','enWord','enStart'] },
-  { id:'num',   name:'ملعب الأرقام',          short:'الأرقام',          ic:()=>fmt(1)+' '+fmt(2)+' '+fmt(3), gens:['numCount','numCount','numCount','numHear','numCompare','numNext'] },
-  { id:'math',  name:'ملعب الحساب',           short:'الحساب',           ic:()=>'+ −', gens:['mathAdd','mathAdd','mathAdd','mathSub','mathSub'] },
-  { id:'shape', name:'ملعب الأشكال والألوان',  short:'الأشكال والألوان', ic:()=>'🔺🔵', gens:['shapeFind','shapeFind','colorFind','colorFind','colorObj','shapeColor','shapeReal'] }
+  { id:'ar',    name:'ملعب الحروف العربي',    short:'الحروف العربي',    ic:()=>'أ ب ت', gens:{
+      1:['arHear','arHear','arWord','arWord','arPic'],
+      2:['arHear','arWord','arPic','arHaraka','arHaraka','arMissing'],
+      3:['arHaraka','arMadd','arMadd','arRead','arRead','arMissing','arWord'] } },
+  { id:'en',    name:'ملعب الحروف الإنجليزي',  short:'الحروف الإنجليزي', ic:()=>'<span class="ltr">A B C</span>', gens:{
+      1:['enHear','enHear','enCase','enWord','enStart'],
+      2:['enHear','enCase','enCase','enNext','enMissing','enStart','enWord'],
+      3:['enHear','enRead','enRead','enMissing','enLast','enNext','enCase'] } },
+  { id:'num',   name:'ملعب الأرقام',          short:'الأرقام',          ic:()=>fmt(1)+' '+fmt(2)+' '+fmt(3), gens:{
+      1:['numCount','numCount','numCount','numHear','numCompare','numNext'],
+      2:['numCount','numCount','numHear','numCompare','numNext','numSeq','numTens'],
+      3:['numHear','numCompare','numNext','numSeq','numSeq','numTens','numTens'] } },
+  { id:'math',  name:'ملعب الحساب',           short:'الحساب',           ic:()=>'+ −', gens:{
+      1:['mathAdd','mathAdd','mathAdd','mathSub','mathSub'],
+      2:['mathAdd','mathAdd','mathSub','mathSub','mathMissing','mathThree'],
+      3:['mathAdd','mathSub','mathMissing','mathMissing','mathThree','mathTens','mathStory','mathStory'] } },
+  { id:'shape', name:'ملعب الأشكال والألوان',  short:'الأشكال والألوان', ic:()=>'🔺🔵', gens:{
+      1:['shapeFind','shapeFind','colorFind','colorFind','colorObj','shapeColor','shapeReal'],
+      2:['shapeColor','shapeSides','shapeSides','colorMix','shapePattern','shapePattern','shapeBySides'],
+      3:['shapeSides','colorMix','shapePattern','shapePattern','shapePattern','shapeCount','shapeCount','shapeBySides'] } }
 ];
+const LEVEL_NAMES = ['', 'سهل', 'متوسط', 'صعب'];
+function levelFor(i){
+  const d = S.settings.diff;
+  if (d === 1 || d === 2 || d === 3) return d;
+  return (S.level && S.level[STAGES[i].id]) || 2;
+}
 
-function makeRound(stageIdx){
-  const st = STAGES[stageIdx], seen = new Set(), qs = [];
+function makeRound(stageIdx, lvl){
+  lvl = lvl || levelFor(stageIdx);
+  const st = STAGES[stageIdx], gens = st.gens[lvl], seen = new Set(), qs = [];
   let guard = 0;
   while (qs.length < 10 && guard++ < 500){
-    const q = GEN[pick(st.gens)]();
+    const q = GEN[pick(gens)](lvl);
     if (seen.has(q.key)) continue;
     seen.add(q.key); q.options = shuffle(q.options); qs.push(q);
   }
@@ -859,7 +1128,8 @@ function renderHome(){
     const b = document.createElement('button');
     b.className = 'stage-card'; b.style.background = STAGE_COLORS[i];
     const c = cupsFor(i);
-    b.innerHTML = `${c ? `<span class="cups">🏆 ${fmt(c)}</span>` : ''}<span class="ic">${st.ic()}</span><span>${st.name}</span>`;
+    const lv = levelFor(i);
+    b.innerHTML = `${c ? `<span class="cups">🏆 ${fmt(c)}</span>` : ''}<span class="ic">${st.ic()}</span><span>${st.name}</span><span class="lvl">${'⭐'.repeat(lv)} ${LEVEL_NAMES[lv]}</span>`;
     b.addEventListener('click', () => { Snd.init(); Snd.tap(); startStage(i); });
     box.appendChild(b);
   });
@@ -1148,17 +1418,8 @@ async function playDribble(ok, idx){
 
 /* ---------- 5. keepy-ups: juggle as many times as the numeric answer ---------- */
 function juggleCount(q){
-  const c = q.check || {};
-  switch (c.type){
-    case 'count': case 'hear': return c.n;
-    case 'next': return c.n + 1;
-    case 'prev': return c.n - 1;
-    case 'add': return c.a + c.b;
-    case 'sub': return c.a - c.b;
-    case 'max': return Math.max(...c.arr);
-    case 'min': return Math.min(...c.arr);
-    default: return 5;
-  }
+  const right = q.options.find(o => o.ok), v = right && right.v;
+  return (typeof v === 'number' && v >= 1 && v <= 20) ? v : 5;
 }
 async function playJuggle(ok, q){
   const ball = $('#ball'), me = $('#player'), jc = $('#jc');
@@ -1287,13 +1548,19 @@ function finishRound(){
   const st = G.stage;
   S.trophies.push({ s:st, d:Date.now(), f:G.starsWon });
   addStars(3);
+  let lvMsg = '';
+  if (S.settings.diff === 'auto'){
+    const id = STAGES[st].id, lv = S.level[id] || 2;
+    if (G.starsWon >= 9 && lv < 3){ S.level[id] = lv + 1; lvMsg = `🚀 طلعت ${'⭐'.repeat(lv + 1)} المستوى ال${LEVEL_NAMES[lv + 1]}!`; }
+    else if (G.starsWon <= 4 && lv > 1){ S.level[id] = lv - 1; }
+  }
   save();
   $('#endCup').innerHTML = trophySVG(STAGE_COLORS[st]);
   $('#endTitle').textContent = `كسبت كاس ${STAGES[st].name}! 🏆`;
-  $('#endStars').innerHTML = `خلّصت الـ ${fmt(10)} تحديات! ⚽🧤🤹<br>⭐ +${fmt(G.starsWon + 3)} نجمة`;
+  $('#endStars').innerHTML = `خلّصت الـ ${fmt(10)} تحديات! ⚽🧤🤹<br>⭐ +${fmt(G.starsWon + 3)} نجمة` + (lvMsg ? `<br><b>${lvMsg}</b>` : '');
   $('#endModal').classList.add('show');
   Snd.fanfare(); confetti(60);
-  Speech.say(`مبروك يا يامن! كسبت كاس ${STAGES[st].name}. الكاس راح دولاب البطولات`);
+  Speech.say(`مبروك يا يامن! كسبت كاس ${STAGES[st].name}. الكاس راح دولاب البطولات` + (lvMsg ? '. وطلعت المستوى الأصعب! برافو' : ''));
   G.busy = false;
 }
 $('#endAgain').addEventListener('click', () => { Snd.tap(); $('#endModal').classList.remove('show'); const s = G ? G.stage : 0; startStage(s); });
@@ -1413,6 +1680,12 @@ function renderParent(){
   }
   html += `</div>`;
   const lim = [0, 10, 15, 20, 30, 45, 60].map(v => `<option value="${v}" ${S.settings.limit === v ? 'selected' : ''}>${v ? v + ' دقيقة' : 'من غير حد'}</option>`).join('');
+  const dsel = [['auto', 'تلقائي (بيعلى وينزل مع مستوى يامن)'], [1, '⭐ سهل'], [2, '⭐⭐ متوسط'], [3, '⭐⭐⭐ صعب']]
+    .map(([v, t]) => `<option value="${v}" ${String(S.settings.diff) === String(v) ? 'selected' : ''}>${t}</option>`).join('');
+  html += `<div class="card"><h3>🎯 مستوى الأسئلة</h3>
+    <div class="row" style="justify-content:flex-start"><label for="diffSel">المستوى:</label><select id="diffSel">${dsel}</select></div>
+    ${STAGES.map((st, i) => `<div class="stat"><span class="nm">${st.short}</span><span>${'⭐'.repeat(levelFor(i))} ${LEVEL_NAMES[levelFor(i)]}</span></div>`).join('')}
+    <p class="note">في "تلقائي": لو جاوب ٩ من ١٠ صح من أول مرة بيطلع مستوى، ولو ٤ أو أقل بينزل مستوى. المستوى الصعب فيه: الحركات والمدود وقراءة كلمات، ترتيب الحروف الإنجليزي وقراءة كلمات، أرقام لحد ٩٩ وعشرات وآحاد، مسائل كلامية والرقم الناقص، والأنماط وخلط الألوان.</p></div>`;
   html += `<div class="card"><h3>⏱️ وقت اللعب</h3>
     <div class="row" style="justify-content:flex-start"><label for="limitSel">الحد اليومي:</label><select id="limitSel">${lim}</select></div>
     <div class="row" style="justify-content:flex-start;margin-top:10px">
@@ -1433,10 +1706,11 @@ function renderParent(){
       voiceOk ? `<p class="note">الصوت العربي المستخدم: ${esc(Speech.ar.name)} (${esc(Speech.ar.lang)})</p>` :
       `<p class="warn">مش لاقي صوت عربي متسطب على الجهاز. على أندرويد: الإعدادات ← اللغة والإدخال ← تحويل النص إلى كلام ← Google ← ثبّت "العربية". اللعبة هتحاول تقرا بالعربي برضه.</p>`}
   </div>`;
-  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">الإصدار ٢ (٥ أنواع لعب)</p><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
+  html += `<div class="card"><h3>🗑️ البداية من الأول</h3><p class="note">الإصدار ٣ (٥ أنواع لعب، ٣ مستويات)</p><p class="note">ده هيمسح الكؤوس والنجوم والإحصائيات واللبس اللي اتفتح (الإعدادات بتفضل زي ما هي).</p>
     <button class="btn small" id="resetAll" style="background:#b71c1c">امسح التقدم وابدأ من الأول</button></div>`;
   body.innerHTML = html;
   $('#limitSel').addEventListener('change', e => { S.settings.limit = +e.target.value; save(); renderParent(); });
+  $('#diffSel').addEventListener('change', e => { const v = e.target.value; S.settings.diff = v === 'auto' ? 'auto' : +v; save(); renderParent(); });
   $('#digSel').addEventListener('change', e => { S.settings.digits = e.target.value; save(); renderParent(); });
   $('#voiceChk').addEventListener('change', e => { S.settings.voice = e.target.checked; save(); });
   $('#soundChk').addEventListener('change', e => { S.settings.sound = e.target.checked; save(); });
@@ -1488,7 +1762,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 }
 
 /* test hook (read-only access for automated checks) */
-window.__YC = { game: () => G, scene: SC, GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
+window.__YC = { levelFor, LEVEL_NAMES, game: () => G, scene: SC, GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
 })();
 </script>
 </body>

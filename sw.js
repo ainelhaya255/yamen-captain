@@ -1,5 +1,5 @@
 /* Offline cache for "يامن الكابتن" — optional; index.html works without it. */
-const CACHE = 'yamen-captain-v4';
+const CACHE = 'yamen-captain-v5';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, { cache: 'reload' })))).then(() => self.skipWaiting()));
