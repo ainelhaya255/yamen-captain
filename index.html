@@ -284,6 +284,39 @@ body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122
 #rLockerBody h3{color:#ad1457;font-size:22px;margin:12px 4px 6px}
 #rlocker .item svg{width:58px;height:106px}
 #parentTabs{display:flex;gap:8px;margin:4px 0}
+/* ================= FAMILY CHALLENGE ================= */
+.duel-btn{border:4px solid #fff;border-radius:24px;background:#fff;font-family:inherit;font-weight:900;font-size:clamp(20px,5.4vw,28px);padding:10px 22px;color:#6a1b9a;box-shadow:0 7px 0 rgba(0,0,0,.25);width:min(560px,100%)}
+.duel-btn:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.duel-btn small{display:block;font-size:14px;color:#777;font-weight:700}
+body.duel{background:linear-gradient(135deg,#2f9d46 0 50%,#f48fb1 50% 100%)}
+#duel{gap:8px}
+.dboard{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;background:#fff;border-radius:22px;padding:6px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.dside{display:flex;flex-direction:column;align-items:center;border-radius:16px;padding:2px 4px;border:3px solid transparent;transition:background .2s,border-color .2s;min-width:0}
+.dside b{font-size:18px}
+.dside.on.y{border-color:#c40000;background:#ffebee}.dside.on.r{border-color:#ec407a;background:#fce4ec}
+.dav svg{width:52px;height:52px}
+.dsc{font-size:30px;font-weight:900;line-height:1}
+.dside.y .dsc{color:#c40000}.dside.r .dsc{color:#ad1457}
+.dmid{text-align:center;min-width:96px}
+.dvs{font-weight:900;color:#9e9e9e;font-size:18px}
+.dteam{font-size:13px;font-weight:800;color:#5d4037}
+.dbar{width:96px;height:12px;background:#eee;border-radius:6px;overflow:hidden;margin:4px auto}
+.dbar b{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffc400,#ff8f00);transition:width .4s}
+.dturn{text-align:center;font-weight:900;font-size:clamp(22px,6vw,32px);color:#fff;border-radius:16px;padding:4px;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.dturn.y{background:#c40000}.dturn.r{background:#ec407a}
+.dq-card{background:#fff;border-radius:22px;flex:1;min-height:150px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;overflow:auto;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+#dQ.y{font-size:clamp(22px,5.6vw,34px);font-weight:900;text-align:center;line-height:1.35}
+#dQ.r{font-size:clamp(19px,4.8vw,28px);font-weight:800;text-align:center;line-height:1.6}
+#dQ b{color:#ad1457}
+#dVis{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;font-size:38px;max-width:100%}
+#dOpts{display:grid;gap:10px;flex:none;padding-bottom:4px}
+#dOpts.y{grid-template-columns:repeat(3,1fr)}#dOpts.r{grid-template-columns:repeat(2,minmax(0,1fr))}#dOpts.r.three .ropt:last-child{grid-column:1/-1}
+#dBanner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:clamp(26px,7vw,44px);color:#fff;background:rgba(46,125,50,.85);border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s}
+#dBanner.show{opacity:1;animation:pop .45s}
+#dBanner.miss{background:rgba(106,27,154,.78);font-size:clamp(22px,6vw,36px)}
+.dend-av{display:flex;justify-content:center;gap:14px;align-items:flex-end}
+.dend-av svg{width:96px;height:auto}
+#dEndS{font-size:24px;font-weight:900}
 .ptab{flex:1;border:3px solid #cfd8dc;border-radius:16px;background:#fff;font-family:inherit;font-weight:900;font-size:19px;padding:8px}
 .ptab.on{border-color:#1976d2;background:#e3f2fd}
 </style>
@@ -298,7 +331,9 @@ body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122
     <button id="startBtn" class="pick-card yamen"><div id="introHero"></div><b>يامن الكابتن ⚽</b><small>أولى ابتدائي</small></button>
     <button id="startRoaa" class="pick-card roaa"><div id="introRoaa"></div><b>رؤى المصممة 👗</b><small>خامسة وسادسة</small></button>
   </div>
-  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫٣</div>
+  <button id="duelBtn" class="duel-btn">🤝 تحدي يامن ورؤى<small>بالدور على نفس الموبايل… وكاس العيلة 🏆</small></button>
+  <div class="sub" id="famInfo" style="font-size:17px;font-weight:900"></div>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫٤</div>
   <div class="sub" id="offState" style="font-size:15px;opacity:.95"></div>
 </section>
 
@@ -412,6 +447,26 @@ body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122
   <h2 id="rEndTitle"></h2>
   <p id="rEndTxt"></p>
   <div class="row"><button class="rbtn" id="rEndAgain">تصميم جديد ✨</button><button class="rbtn alt" id="rEndHome">الاستوديوهات</button></div>
+</div></div>
+
+<!-- ============ FAMILY CHALLENGE ============ -->
+<section id="duel" class="screen">
+  <div class="topbar"><button class="icon-btn" id="dQuit" aria-label="رجوع">🏠</button><div class="title" style="flex:1;font-size:clamp(22px,6vw,36px)">تحدي يامن ورؤى 🤝</div><button class="icon-btn" id="dRead" aria-label="اسمع السؤال">🔊</button></div>
+  <div class="dboard">
+    <div class="dside y" id="dSideY"><div class="dav" id="dAvY"></div><b>يامن</b><span class="dsc" id="dScY">٠</span></div>
+    <div class="dmid"><div class="dvs">VS</div><div class="dbar"><b id="dBar"></b></div><div class="dteam" id="dTeam"></div></div>
+    <div class="dside r" id="dSideR"><div class="dav" id="dAvR"></div><b>رؤى</b><span class="dsc" id="dScR">٠</span></div>
+  </div>
+  <div class="dturn" id="dTurn"></div>
+  <div class="dq-card"><div id="dQ"></div><div id="dVis"></div><div id="dBanner"></div></div>
+  <div id="dOpts"></div>
+</section>
+<div id="dEnd" class="modal"><div class="box">
+  <div class="dend-av" id="dEndAv"></div>
+  <h2 id="dEndT"></h2>
+  <p id="dEndS"></p>
+  <p id="dEndP"></p>
+  <div class="row"><button class="btn" id="dAgain">تحدي تاني 🤝</button><button class="btn white" id="dHome">رجوع</button></div>
 </div></div>
 
 <div id="toast"></div>
@@ -1231,7 +1286,9 @@ function show(id){
   current = id;
   document.body.classList.toggle('roaa', isRoaa(id));
   const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', isRoaa(id) ? '#ec407a' : '#c40000');
-  if (id !== 'play' && id !== 'rplay') Speech.stop();
+  if (id !== 'play' && id !== 'rplay' && id !== 'duel') Speech.stop();
+  document.body.classList.toggle('duel', id === 'duel');
+  if (id === 'intro') renderFamily();
   if (id === 'rhome') renderRHome();
   if (id === 'ralbum') renderRAlbum();
   if (id === 'rlocker') renderRLocker();
@@ -1889,6 +1946,7 @@ setInterval(() => {
   if (S.time.date !== todayKey()){ S.time = { date:todayKey(), sec:0, bonus:0 }; save(); }
   if (R.time.date !== todayKey()){ R.time = { date:todayKey(), sec:0, bonus:0 }; rSave(); }
   if (document.visibilityState !== 'visible' || current === 'parent' || current === 'intro' || $('#rest').classList.contains('show')) return;
+  if (current === 'duel'){ S.time.sec++; R.time.sec++; if (++tick % 10 === 0){ save(); rSave(); } return; }   // a 10-question challenge is never interrupted
   const roaa = isRoaa(current), T = roaa ? R : S, sv = roaa ? rSave : save;
   T.time.sec++;
   if (++tick % 10 === 0) sv();
@@ -2534,6 +2592,112 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 }
 
 /* test hook (read-only access for automated checks) */
+
+/* =========================================================================
+   FAMILY CHALLENGE: Yamen and Roaa take turns on the same phone.
+   Each answers 5 questions from HIS / HER own curriculum and level.
+   8+ correct together = the family cup for both.
+   ========================================================================= */
+const FKEY = 'familyDuel.v1', TURNS = 10, TEAM_GOAL = 8;
+let F;
+try { F = JSON.parse(localStorage.getItem(FKEY)) || {}; } catch(e){ F = {}; }
+F.cups = F.cups || 0; F.games = F.games || [];
+const fSave = () => { try { localStorage.setItem(FKEY, JSON.stringify(F)); } catch(e){} };
+let D = null;
+const yHead = () => `<svg viewBox="2 -6 56 54">${playerFrontSVG(jersey())}</svg>`;
+const rHead = () => `<svg viewBox="24 4 52 56">${girlSVG({ pieces:'all' })}</svg>`;
+function renderFamily(){
+  const n = F.games.length;
+  $('#famInfo').textContent = F.cups ? `🏆 كؤوس العيلة: ${fmt(F.cups)} من ${fmt(n)} تحدي` : (n ? `لعبتوا ${fmt(n)} تحدي… كاس العيلة لسه مستنيكم 🏆` : '');
+}
+function duelQ(kid){
+  let q;
+  if (kid === 'y'){ const i = rnd(STAGES.length), lv = levelFor(i); q = GEN[pick(STAGES[i].gens[lv])](lv); }
+  else { const i = rnd(R_STAGES.length), lv = rLevel(i); q = RGEN[pick(R_STAGES[i].gens[lv])](lv); }
+  q.options = shuffle(q.options); return q;
+}
+const dKid = () => D.turn % 2 === 0 ? 'y' : 'r';      // Yamen (the younger) always starts
+function dBoard(){
+  const team = D.y + D.r, k = D.turn < TURNS ? dKid() : '';
+  $('#dScY').textContent = fmt(D.y); $('#dScR').textContent = fmt(D.r);
+  $('#dSideY').classList.toggle('on', k === 'y'); $('#dSideR').classList.toggle('on', k === 'r');
+  $('#dBar').style.width = Math.min(100, team / TEAM_GOAL * 100) + '%';
+  $('#dTeam').textContent = `مع بعض: ${fmt(team)} / ${fmt(TEAM_GOAL)} 🏆`;
+}
+function dBanner(t, cls){ const b = $('#dBanner'); b.className = ''; void b.offsetWidth; b.textContent = t; b.className = 'show ' + (cls || ''); }
+function duelStart(){
+  const tired = [timeIsUp(S) ? 'يامن' : '', timeIsUp(R) ? 'رؤى' : ''].filter(Boolean);
+  if (tired.length){ toastQ.push(`⏰ وقت اللعب النهارده خلص لـ${tired.join(' و')}<br><small>ولي الأمر يقدر يزوّد الوقت</small>`); runToasts(); return; }
+  applyJersey();
+  D = { turn:0, y:0, r:0, seen:new Set(), busy:false };
+  $('#dAvY').innerHTML = yHead(); $('#dAvR').innerHTML = rHead();
+  show('duel'); Snd.whistle(); dNext();
+}
+function dNext(){
+  const kid = dKid(); let q, g = 0;
+  do { q = duelQ(kid); } while (D.seen.has(q.key) && g++ < 60);
+  D.seen.add(q.key); D.q = q;
+  dBoard();
+  const t = $('#dTurn'); t.textContent = kid === 'y' ? 'دور يامن ⚽' : 'دور رؤى 👗'; t.className = 'dturn ' + kid;
+  anim(t, [{ transform:'scale(.6)' }, { transform:'scale(1.08)' }, { transform:'scale(1)' }], { duration:400, fill:'none' });
+  $('#dBanner').className = '';
+  $('#dQ').className = kid; $('#dQ').innerHTML = q.text; $('#dVis').innerHTML = q.visual || '';
+  const box = $('#dOpts'); box.className = kid + (kid === 'r' && q.options.length === 3 ? ' three' : ''); box.innerHTML = '';
+  q.options.forEach(o => { const b = document.createElement('button'); b.className = kid === 'y' ? 'opt' : 'ropt'; b.innerHTML = o.html; b.dataset.ok = o.ok ? '1' : '0'; b.addEventListener('click', () => dAnswer(b, o)); box.appendChild(b); });
+  dAsk(false);
+}
+function dAsk(force){
+  if (!D || !D.q) return;
+  const kid = dKid(), parts = toParts(D.q.say);
+  if (kid === 'y') Speech.say(force ? parts : [{ t:'دور يامن!' }].concat(parts), true);   // Yamen can't read yet: always read aloud
+  else rSay(force ? parts : [{ t:'دور رؤى!' }].concat(parts), force);
+}
+$('#dRead').addEventListener('click', () => { Snd.init(); dAsk(true); });
+async function dAnswer(btn, o){
+  if (!D || D.busy) return;
+  D.busy = true; Snd.init(); Speech.stop();
+  const kid = dKid(), T = kid === 'y' ? S : R, q = D.q;
+  const st = T.stats[q.sub] || (T.stats[q.sub] = { q:0, f:0 }); st.q++;
+  document.querySelectorAll('#dOpts button').forEach(b => b.style.pointerEvents = 'none');
+  if (o.ok){
+    st.f++; D[kid]++; btn.classList.add('right');
+    if (kid === 'y'){ Snd.kick(); setTimeout(() => Snd.cheer(), 120); addStars(1); dBanner('⚽ جوووون يا يامن!'); Speech.say('جووون يا يامن!', true); }
+    else { Snd.sparkle(); rGems(1); dBanner('💎 برافو يا رؤى!'); }
+    confetti(22);
+  } else {
+    const m = T.mistakes[q.label] || (T.mistakes[q.label] = { n:0, s:q.sub }); m.n++;
+    Snd.save(); btn.disabled = true;
+    document.querySelectorAll('#dOpts button').forEach(b => { if (b.dataset.ok === '1') b.classList.add('right'); });
+    dBanner(kid === 'y' ? 'قربت! الإجابة الصح أهي 👇' : 'قربتي! الإجابة الصح أهي 👇', 'miss');
+    if (kid === 'y') Speech.say('قربت! بص على الإجابة الصح', true);
+    setTimeout(() => { const b = $('#dBanner'); if (b.classList.contains('miss')) b.className = ''; }, 1200);   // let them see the right answer
+  }
+  save(); rSave(); dBoard();
+  await sleep(o.ok ? 1700 : 2600);
+  if (!D) return;
+  D.turn++; D.busy = false;
+  if (D.turn >= TURNS) dEnd(); else dNext();
+}
+function dEnd(){
+  const team = D.y + D.r, won = team >= TEAM_GOAL;
+  F.games.push({ d:Date.now(), y:D.y, r:D.r, won });
+  if (won){ F.cups++; addStars(3); rGems(3); }
+  fSave(); save(); rSave(); dBoard();
+  $('#dEndAv').innerHTML = `<svg viewBox="-6 -8 72 110">${playerFrontSVG(jersey())}</svg><svg viewBox="4 0 92 184">${girlSVG({ pieces:'all' })}</svg>`;
+  $('#dEndT').textContent = won ? '🏆 كسبتوا كاس العيلة!' : '💪 قربتوا من كاس العيلة!';
+  $('#dEndS').innerHTML = `يامن ${fmt(D.y)} ⚽ — 👗 رؤى ${fmt(D.r)}`;
+  $('#dEndP').innerHTML = won ? `جبتوا مع بعض ${fmt(team)} من ${fmt(TURNS)} 👏<br>⭐ +٣ ليامن و 💎 +٣ لرؤى` : `جبتوا مع بعض ${fmt(team)} من ${fmt(TURNS)}. محتاجين ${fmt(TEAM_GOAL)} عشان الكاس… المرة الجاية! 🤝`;
+  $('#dEnd').classList.add('show');
+  if (won){ Snd.fanfare(); confetti(70); fireworks(); } else { Snd.sparkle(); confetti(25); }
+  Speech.say(won ? 'برافو يا يامن ويا رؤى! كسبتوا كاس العيلة سوا' : 'برافو عليكم! قربتوا من كاس العيلة، المرة الجاية هتكسبوه', true);
+}
+$('#duelBtn').addEventListener('click', () => { Snd.init(); Snd.tap(); duelStart(); });
+$('#dAgain').addEventListener('click', () => { Snd.tap(); $('#dEnd').classList.remove('show'); duelStart(); });
+$('#dHome').addEventListener('click', () => { Snd.tap(); $('#dEnd').classList.remove('show'); D = null; show('intro'); });
+$('#dQuit').addEventListener('click', () => { Snd.tap(); D = null; show('intro'); });
+renderFamily();
+
+window.__FD = { state: () => F, game: () => D };
 window.__RQ = { RGEN, R_STAGES, rMakeRound, rLevel, state: () => R, game: () => RG, AR_SYN, AR_ANT, AR_PL, SCI, SOC };
 window.__YC = { levelFor, LEVEL_NAMES, game: () => G, scene: SC, GEN, STAGES, makeRound, AR, EN_WORDS, OBJ_COLORS, REAL_SHAPES, COLORS, SHAPES, state: () => S };
 })();

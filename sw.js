@@ -1,5 +1,5 @@
 /* Offline cache for "يامن ورؤى" — optional; index.html works without it. */
-const CACHE = 'yamen-captain-v9';
+const CACHE = 'yamen-captain-v10';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const WAIT_MS = 2500;   // weak signal: give the network this long, then use the saved copy
 
