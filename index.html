@@ -298,7 +298,7 @@ body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122
     <button id="startBtn" class="pick-card yamen"><div id="introHero"></div><b>يامن الكابتن ⚽</b><small>أولى ابتدائي</small></button>
     <button id="startRoaa" class="pick-card roaa"><div id="introRoaa"></div><b>رؤى المصممة 👗</b><small>خامسة وسادسة</small></button>
   </div>
-  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫٢</div>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫٣</div>
   <div class="sub" id="offState" style="font-size:15px;opacity:.95"></div>
 </section>
 
@@ -608,7 +608,11 @@ const ballStyle = () => BALLS.find(b => b.id === S.equip.ball) || BALLS[0];
 /* =========================================================
    SVG art (all hand-drawn here)
    ========================================================= */
-const SKIN = '#e9b07c', HAIR = '#3b2416';
+const SKIN = '#e8b48f', HAIR = '#46291b', HAIR_HI = '#6b4430';
+/* Yamen's curly hair (back and front); other players keep plain short hair */
+const CURLS_BACK = [[21,9,4.2],[25.5,5.2,4.4],[30.5,3.8,4.6],[35.5,5,4.4],[39.5,9,4.2],[19.8,14,3.6],[40.6,14,3.6],[24,11,3.8],[30,10,4],[36,11,3.8],[22,18,3],[38,18,3]];
+const CURLS_FRONT = [[21,9,4],[25.5,5.5,4.4],[30.5,4,4.6],[35.5,5.5,4.4],[39.5,9,4],[19.6,12.5,3],[40.4,12.5,3],[25,8.6,3],[30,7.6,3.2],[35,8.6,3]];
+const curls = list => list.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${HAIR}"/>`).join('') + list.filter((_, i) => i % 3 === 0).map(([x, y]) => `<circle cx="${x - 1}" cy="${y - 1.2}" r="1.3" fill="${HAIR_HI}"/>`).join('');
 function playerSVG(j, o){
   j = j || jersey(); o = o || {};
   const nm = o.name === undefined ? 'يامن' : o.name, num = o.num || '17';
@@ -631,13 +635,13 @@ function playerSVG(j, o){
     <rect x="26" y="21" width="8" height="7" fill="${SKIN}"/>
     <circle cx="19.5" cy="14" r="2.6" fill="${SKIN}"/><circle cx="40.5" cy="14" r="2.6" fill="${SKIN}"/>
     <circle cx="30" cy="13" r="10.5" fill="${SKIN}"/>
-    <path d="M19.5 14 Q19 2 30 2 Q41 2 40.5 14 Q40.5 20 37 22 L23 22 Q19.5 20 19.5 14 Z" fill="${HAIR}"/>
+    ${nm === 'يامن' ? `<path d="M19.5 15 Q19 4 30 4 Q41 4 40.5 15 Q40.5 20 37 22 L23 22 Q19.5 20 19.5 15 Z" fill="${HAIR}"/>${curls(CURLS_BACK)}` : `<path d="M19.5 14 Q19 2 30 2 Q41 2 40.5 14 Q40.5 20 37 22 L23 22 Q19.5 20 19.5 14 Z" fill="${HAIR}"/>`}
   </g>`;
 }
 /* front view (keeper Yamen, team-mates) */
 function playerFrontSVG(j, o){
   j = j || jersey(); o = o || {};
-  const num = o.num || '17';
+  const num = o.num || '17', yam = num === '17';
   const stroke = j.c === '#ffffff' ? 'stroke="#ccc" stroke-width="1"' : '';
   const shorts = j.c === '#ffffff' ? '#d50000' : '#ffffff';
   const glove = cx => o.gloves ? `<circle cx="${cx}" cy="61" r="4.6" fill="#fff" stroke="#ff7043" stroke-width="1.6"/>` : '';
@@ -656,9 +660,10 @@ function playerFrontSVG(j, o){
     <rect x="26" y="21" width="8" height="7" fill="${SKIN}"/>
     <circle cx="19.5" cy="14" r="2.6" fill="${SKIN}"/><circle cx="40.5" cy="14" r="2.6" fill="${SKIN}"/>
     <circle cx="30" cy="13" r="10.5" fill="${SKIN}"/>
-    <path d="M19.5 12 Q20 1.5 30 2 Q40 1.5 40.5 12 Q36 6.5 30 7.5 Q24 6.5 19.5 12 Z" fill="${HAIR}"/>
-    <circle cx="26" cy="14" r="1.4" fill="#222"/><circle cx="34" cy="14" r="1.4" fill="#222"/>
-    <path d="M26 18 Q30 21.5 34 18" fill="none" stroke="#7a3b1d" stroke-width="1.3" stroke-linecap="round"/>
+    ${yam ? curls(CURLS_FRONT) : `<path d="M19.5 12 Q20 1.5 30 2 Q40 1.5 40.5 12 Q36 6.5 30 7.5 Q24 6.5 19.5 12 Z" fill="${HAIR}"/>`}
+    <circle cx="26" cy="14.2" r="1.5" fill="#222"/><circle cx="34" cy="14.2" r="1.5" fill="#222"/><circle cx="26.5" cy="13.7" r=".5" fill="#fff"/><circle cx="34.5" cy="13.7" r=".5" fill="#fff"/>
+    ${yam ? `<path d="M23.8 11.4 Q26 10.4 28 11.3 M32 11.3 Q34 10.4 36.2 11.4" stroke="${HAIR}" stroke-width=".9" fill="none" stroke-linecap="round"/><path d="M25.2 17.4 Q30 23 34.8 17.4 Z" fill="#fff" stroke="#7a3b1d" stroke-width="1" stroke-linejoin="round"/>`
+          : `<path d="M26 18 Q30 21.5 34 18" fill="none" stroke="#7a3b1d" stroke-width="1.3" stroke-linecap="round"/>`}
   </g>`;
 }
 function playerStandalone(j){ return `<svg viewBox="-6 -8 72 110" class="hero">${playerSVG(j)}</svg>`; }
@@ -1239,7 +1244,7 @@ document.querySelectorAll('.back').forEach(b => b.addEventListener('click', () =
 
 function applyJersey(){ document.documentElement.style.setProperty('--jersey', jersey().c); }
 
-$('#introHero').innerHTML = playerStandalone();
+$('#introHero').innerHTML = `<svg viewBox="-6 -8 72 110" class="hero">${playerFrontSVG(jersey())}</svg>`;
 $('#startBtn').addEventListener('click', () => {
   Snd.init(); Snd.whistle();
   // warm-up speech on a user gesture (needed on Android Chrome / iOS)
@@ -1903,7 +1908,7 @@ applyJersey();
 const RKEY = 'roaaDesigner.v1';
 const RDEFAULT = () => ({
   gems: 0, designs: [], stats: {}, mistakes: {},
-  equip: { hair:'long', hairColor:'brown', coll:'rose' },
+  equip: { hair:'pony', hairColor:'dark', coll:'rose' },
   settings: { limit: 30, voice: false, diff: 'auto' },
   level: { math:2, ar:2, en:2, sci:2, soc:2 },
   time: { date: todayKey(), sec: 0, bonus: 0 }
@@ -1914,6 +1919,7 @@ function rLoad(){
   const d = RDEFAULT();
   ['equip', 'settings', 'level', 'time'].forEach(k => R[k] = Object.assign(d[k], R[k] || {}));
   R.stats = R.stats || {}; R.mistakes = R.mistakes || {}; R.designs = R.designs || [];
+  if (!R.look2){ R.equip.hair = 'pony'; R.equip.hairColor = 'dark'; R.look2 = 1; rSave(); }   // her real look: dark ponytail
 }
 function rSave(){ try { localStorage.setItem(RKEY, JSON.stringify(R)); } catch(e){} }
 rLoad();
@@ -1928,8 +1934,8 @@ const R_COLL = [
   { id:'lilac',  name:'الليلك 💜',     need:65, dress:'#ce93d8', acc:'#6a1b9a', pat:'hearts',  patC:'#ffffff', shoe:'#6a1b9a' },
   { id:'royal',  name:'الملكي 👑',     need:90, dress:'#212121', acc:'#ffc107', pat:'sparkle', patC:'#ffd54f', shoe:'#ffc107', tiara:true }
 ];
-const R_HAIR = [ { id:'long', name:'شعر طويل', need:0 }, { id:'pony', name:'ديل حصان', need:8 }, { id:'bun', name:'كعكة', need:22 }, { id:'curly', name:'كيرلي', need:38 } ];
-const R_HAIRC = [ { id:'brown', name:'بني', need:0, c:'#4e342e' }, { id:'black', name:'أسود', need:5, c:'#1b1b1b' }, { id:'auburn', name:'كستنائي', need:18, c:'#8d3b1f' }, { id:'honey', name:'عسلي', need:32, c:'#b9823a' } ];
+const R_HAIR = [ { id:'pony', name:'ديل حصان', need:0 }, { id:'long', name:'شعر طويل', need:8 }, { id:'bun', name:'كعكة', need:22 }, { id:'curly', name:'كيرلي', need:38 } ];
+const R_HAIRC = [ { id:'dark', name:'بني غامق', need:0, c:'#2b1a12' }, { id:'brown', name:'بني', need:5, c:'#4e342e' }, { id:'black', name:'أسود', need:10, c:'#111111' }, { id:'auburn', name:'كستنائي', need:18, c:'#8d3b1f' }, { id:'honey', name:'عسلي', need:32, c:'#b9823a' } ];
 const PIECES = ['dress', 'pattern', 'shoes', 'belt', 'necklace', 'earrings', 'bag', 'bracelet', 'hairAcc', 'sparkle'];
 const PIECE_NAMES = { dress:'الفستان 👗', pattern:'النقشة 🎨', shoes:'الشوز 👠', belt:'الحزام', necklace:'السلسلة 📿', earrings:'الحلق 💎', bag:'الشنطة 👜', bracelet:'الإسورة', hairAcc:'توكة الشعر 🎀', sparkle:'اللمعة ✨' };
 const rColl = id => R_COLL.find(c => c.id === (id || R.equip.coll)) || R_COLL[0];
@@ -1953,12 +1959,12 @@ function girlSVG(o){
   const C = rColl(o.coll), hc = (R_HAIRC.find(h => h.id === (o.hairColor || R.equip.hairColor)) || R_HAIRC[0]).c, hair = o.hair || R.equip.hair;
   const all = o.pieces === 'all', has = k => all || (o.pieces && o.pieces.has(k));
   const nw = k => o.newPiece === k ? ' class="pc-new"' : '';
-  const uid = 'gp' + (++gUid), SK = '#f2c7a5';
+  const uid = 'gp' + (++gUid), SK = '#e2ab84';
   const dressD = 'M38 62 Q50 57 62 62 L64 94 L78 146 Q50 154 22 146 L36 94 Z';
   let h = `<defs>${patDef(C, uid)}</defs>`;
   // hair behind the body
   if (hair === 'long') h += `<path d="M33 34 Q28 72 32 100 Q50 106 68 100 Q72 72 67 34 Z" fill="${hc}"/>`;
-  if (hair === 'pony') h += `<path d="M61 28 Q82 40 75 80 Q71 94 64 98 Q71 70 59 40 Z" fill="${hc}"/>`;
+  if (hair === 'pony') h += `<path d="M61 28 Q82 40 75 80 Q71 94 64 98 Q71 70 59 40 Z" fill="${hc}"/><path d="M65 30 L69.5 54 L67 54.5 L63.5 32 Z" fill="#fff"/><path d="M64.5 29.5 Q70 21 73 27.5 Q70 31 64.5 29.5 Z M64.5 29.5 Q72 32 69.5 37.5 Q66 35 64.5 29.5 Z" fill="#fff" stroke="#d6d6d6" stroke-width=".5"/>`;
   if (hair === 'curly') h += [[33,34,11],[67,34,11],[31,52,10],[69,52,10],[34,68,9],[66,68,9],[50,22,13]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hc}"/>`).join('');
   if (hair === 'bun') h += `<circle cx="50" cy="18" r="9" fill="${hc}"/>`;
   // legs + shoes
@@ -1982,15 +1988,17 @@ function girlSVG(o){
   h += `<ellipse cx="44.5" cy="38" rx="2" ry="2.5" fill="#3b2416"/><ellipse cx="55.5" cy="38" rx="2" ry="2.5" fill="#3b2416"/><circle cx="45.2" cy="37.2" r=".7" fill="#fff"/><circle cx="56.2" cy="37.2" r=".7" fill="#fff"/>`;
   h += `<path d="M42 35 L41 33.8 M43.5 34.5 L43 33 M57 34.5 L57.5 33 M58.5 35 L59.5 33.8" stroke="#3b2416" stroke-width=".7"/>`;
   h += `<circle cx="41" cy="43.5" r="2.6" fill="#f8a5c2" opacity=".7"/><circle cx="59" cy="43.5" r="2.6" fill="#f8a5c2" opacity=".7"/>`;
-  h += `<path d="M46.5 45 Q50 48.2 53.5 45" fill="none" stroke="#c2185b" stroke-width="1.3" stroke-linecap="round"/>`;
-  if (has('earrings')) h += `<g${nw('earrings')}><circle cx="35.6" cy="43" r="1.8" fill="#ffd54f"/><circle cx="64.4" cy="43" r="1.8" fill="#ffd54f"/></g>`;
+  h += `<path d="M45.4 44.3 Q50 49.6 54.6 44.3 Z" fill="#fff" stroke="#b5485f" stroke-width="1" stroke-linejoin="round"/>`;
+  h += `<circle cx="35.4" cy="42.4" r="1.5" fill="#fff" stroke="#cfcfcf" stroke-width=".4"/><circle cx="64.6" cy="42.4" r="1.5" fill="#fff" stroke="#cfcfcf" stroke-width=".4"/>`;   // her pearl studs
+  if (has('earrings')) h += `<g${nw('earrings')}><path d="M35.4 44 V46.5 M64.6 44 V46.5" stroke="#ffd54f" stroke-width=".7"/><circle cx="35.4" cy="47.6" r="1.6" fill="#ffd54f"/><circle cx="64.6" cy="47.6" r="1.6" fill="#ffd54f"/></g>`;
   // hair in front
   if (hair === 'curly') h += [[38,25,5],[44,22,5],[50,21,5],[56,22,5],[62,25,5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hc}"/>`).join('');
+  else if (hair === 'pony') h += `<path d="M35.3 35 Q35.5 21 50 21 Q64.5 21 64.7 35 Q58 26.5 50 26.6 Q42 26.5 35.3 35 Z" fill="${hc}"/>`;
   else h += `<path d="M35 36 Q35 20 50 20 Q65 20 65 36 Q58 27 50 29 Q42 27 35 36 Z" fill="${hc}"/>`;
   if (hair === 'long') h += `<path d="M35.5 33 Q32 50 35 64 L39 62 Q36.5 48 38.5 35 Z M64.5 33 Q68 50 65 64 L61 62 Q63.5 48 61.5 35 Z" fill="${hc}"/>`;
   if (has('hairAcc')) h += C.tiara
     ? `<path${nw('hairAcc')} d="M40 23 L43 17 L46.5 21 L50 15 L53.5 21 L57 17 L60 23 Z" fill="#ffd54f" stroke="#c49000" stroke-width=".6"/>`
-    : `<g${nw('hairAcc')}><path d="M57 22 L52 18.5 L52.5 25.5 Z M57 22 L62 18.5 L61.5 25.5 Z" fill="${C.acc}"/><circle cx="57" cy="22" r="1.6" fill="${C.acc}" stroke="#fff" stroke-width=".5"/></g>`;
+    : `<g${nw('hairAcc')}><path d="M41 22.5 L36 19 L36.5 26 Z M41 22.5 L46 19 L45.5 26 Z" fill="${C.acc}"/><circle cx="41" cy="22.5" r="1.6" fill="${C.acc}" stroke="#fff" stroke-width=".5"/></g>`;
   if (has('sparkle')) h += `<g${nw('sparkle')} fill="#ffd54f">${[[16,60],[84,58],[12,120],[88,128],[22,170],[80,168],[50,6]].map(([x, y]) => `<path d="M${x} ${y - 4} L${x + 1.2} ${y - 1.2} L${x + 4} ${y} L${x + 1.2} ${y + 1.2} L${x} ${y + 4} L${x - 1.2} ${y + 1.2} L${x - 4} ${y} L${x - 1.2} ${y - 1.2} Z"/>`).join('')}</g>`;
   return `<g class="girl">${h}</g>`;
 }
