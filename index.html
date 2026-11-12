@@ -298,7 +298,8 @@ body.roaa{background:#fde7f1 radial-gradient(circle at 12px 12px,rgba(236,64,122
     <button id="startBtn" class="pick-card yamen"><div id="introHero"></div><b>يامن الكابتن ⚽</b><small>أولى ابتدائي</small></button>
     <button id="startRoaa" class="pick-card roaa"><div id="introRoaa"></div><b>رؤى المصممة 👗</b><small>خامسة وسادسة</small></button>
   </div>
-  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫١</div>
+  <div class="sub" id="ver" style="font-size:15px;opacity:.85">الإصدار ٤٫٢</div>
+  <div class="sub" id="offState" style="font-size:15px;opacity:.95"></div>
 </section>
 
 <!-- ============ HOME ============ -->
@@ -2512,6 +2513,11 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js', { updateViaCache:'none' }).then(r => r.update()).catch(() => {});
   });
+  // tell the parent whether this device already has the offline copy
+  const offMsg = () => caches.match('./index.html').then(r => {
+    $('#offState').textContent = r ? '✅ جاهزة تشتغل من غير نت' : '⏳ بتتجهز للعب من غير نت… سيبها مفتوحة شوية وهي على النت';
+  }).catch(() => {});
+  offMsg(); navigator.serviceWorker.ready.then(() => setTimeout(offMsg, 1500));
   // when a new version takes over, reload once so it shows immediately (only before play starts)
   let reloaded = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
